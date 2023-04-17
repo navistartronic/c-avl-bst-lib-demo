@@ -14,7 +14,6 @@ TL;DR version:
    $ cd c-avl-bst-lib
    $ gmake all
    $ ./demo
-   $ roger@ubuntu-vm:~github.com/navistartronic/c-avl-bst-lib-demo$ ./demo
    Version 1.0.0 Mon Apr 17 14:10:20 2023
 
    Commands available:
