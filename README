@@ -1,0 +1,283 @@
+c-avl-bst-list-demo
+===================
+
+Summary:
+--------
+This is an application that builds an AVL Height Balanced tree library in 
+archive format (.a) with an interactive program (demo) that utilizes the tree
+API's allowing the user to interact and watch the tree operations.
+
+TL;DR version:
+--------------
+   (Needs Linux with development tools: gmake(1), gcc(1), ar(1))
+   $ git clone https://github.com/navistartronic/c-avl-bst-lib-demo.git
+   $ cd c-avl-bst-lib
+   $ gmake all
+   $ ./demo
+   $ roger@ubuntu-vm:~github.com/navistartronic/c-avl-bst-lib-demo$ ./demo
+   Version 1.0.0 Mon Apr 17 14:10:20 2023
+
+   Commands available:
+        To exit program:
+            quit (releases allocated tree/node memory)
+            stop (abort, no cleanup of allocated memory)
+
+        tree operations       key operations       non-std utilities
+        ===============       --------------       =================
+        newt     delt         addk     delk        stat    twalk
+        copy
+
+        tree inquiries        key inquiries
+        ===============       --------------
+        showt    def          findk
+        isempty  count
+        equal    ident
+        rprint   print
+        ckt
+
+   Command: quit
+
+--------------------------------------------------------------------------------
+                           Introduction
+--------------------------------------------------------------------------------
+This project builds an archive library (libbst.a) of AVL height balance search
+tree API's and an application (demo) that uses the library. The library also
+has the ability to create not just an AVL balanced tree but also be used as a
+regular binary search tree when a tree is created.
+
+The client application (demo.c) is an interactive menu based program that uses
+the archive library (libbst.a) to try out all the API's available. It allows you
+to create multiple trees (AVL or BST), add/find/delete keys in each tree, print
+the tree out, inquire about tree properties, and much more.
+
+Included is a test program (test.c) that you can run to stress the tree with
+large numbers of keys added to the AVL tree, add/find/delete and verify tree
+balance etc.  If you really want to stress test it with large node sets, edit the
+Makefile for optimal CFLAG settings, no DEBUG_LIB_* defines, rebuild the library,
+build and run the test. Currently the generated keys are stored in an array and
+at some point after 256,000 keys in the array a segmentation fault occurs (all
+platforms, the array is too large of allocation).  Use of setrlimit(2) may help
+or just rewrite how the keys are created w/o storing them in an array in some
+manor.
+
+There is no recursion in the tree routines which differentiates itself from a
+lot of other binary search tree implementations. This is straight line coding
+for speed.
+
+--------------------------------------------------------------------------------
+                       Makefile Build Options
+--------------------------------------------------------------------------------
+The default Makefile has all this turned off so no info messages are sent to
+output.  Since the library was developed as a research and learning experience,
+it has the ability to output ASCII graphics symbolic of the tree and leaf nodes
+with their memory addresses, notices when memory is allocated/deallocated and
+their pointer addresses, show when each AVL tree rebalancing occurs and which
+type of rebalancing it is, 
+
+Control these features is via DEBUG_LIB_* in the Makefile and rebuild it:
+   # Enable/disable the showing of ASCII art graph boxes of nodes w/addresses:
+   DEBUG_LIB_SHOW_LIBCALL_MALLOC_GRAPHS =
+   DEBUG_LIB_SHOW_LIBCALL_MALLOC_GRAPHS = -DDEBUG_SHOWGRAPHS
+
+   # Enable/disable showing of allocation/deallocation memory w/addresses
+   DEBUG_LIB_SHOW_LIBCALL_MALLOC_INFO =
+   DEBUG_LIB_SHOW_LIBCALL_MALLOC_INFO = -DDEBUG_MALLAC_USAGE
+
+   # Enable/disable AVL tree rebalance info from the library routines:
+   DEBUG_LIB_SHOW_LIBCALL_TREE_REBALANCE =
+   DEBUG_LIB_SHOW_LIBCALL_TREE_REBALANCE = -DDEBUG_SHOWREBALANCE
+
+Set CFLAGS for development or production:
+   GCC_CFLAGS_DEV = -g -Wno-format
+   GCC_CFLAGS_REL = -O3 -Wno-format
+
+   #  with debug info and no optimization (default)
+   CC_FLAGS = $(GCC_CFLAGS_DEV)
+     -or-
+   # no debug info and optimization
+   CC_FLAGS = $(GCC_CFLAGS_REL)
+
+
+--------------------------------------------------------------------------------
+         How to use for real or use a different tree node structure:
+--------------------------------------------------------------------------------
+Examine demo.c to see how to use all the API calls:.
+View each user C module to see the documentation on each function argument and
+return type.
+
+1. vi leaf.h and define the structure you want to store in the tree
+
+2. Write function to compare your keys if different from the repository code.
+
+   int f(Leaf * r1, Leaf * r2) {}
+
+   This function must return, like strcmp(2):
+      negative if r1.key < r2.key
+      zero     if r1.key = r2.key
+      positive if r1.key > r2.key
+
+3. Write the function to print out your records (optional) if different from the
+   repository code.
+       void Print_Node(Leaf * pl, int level) {}
+
+4. vi foobar.c
+   #include <stdio.h>
+   ... 
+
+   /* include of leaf.h needs to come before include of bstpkg.h */
+   /* these are the only includes you need in order to use the library */
+   #include "leaf.h"
+   #include "bstpkg.h
+   ...
+   int f(Leaf *, Leaf *);        /* user written compare function for this tree */
+   void Print_Node(Leaf *, int); /* user written tree printing routine (optional) */
+
+   int main(int argc, char *argv[])
+   {
+           ...
+           /* start using the routines */
+            if (bst_create(treename, AVL, sizeof(Leaf), FALSE, f, Print_Node, TREE_VERIFY_YES)) {
+                printf("\n  --- tree created ---\n");
+            } else {
+                display_err_msg();   /* your routine, not a library call */
+            }
+             ...
+     }
+
+5. compile it:  gcc foobar.c -o foobar lib/libbst.a
+6. run it: ./foobar
+
+--------------------------------------------------------------------------------
+                            History
+--------------------------------------------------------------------------------
+This code base has a long history originally developed from the late 1980's and
+early 1990's where it was originally a very small and limited college course work
+in CS5181 Advanced Data Structures, and after college it was a research project
+on AVL trees and developed into what it is today. It's old enough that their are
+bit fields in inc/struct.h due to space constraints at that time, but included is
+the same inc/struct.h without the bit fields.
+
+This has been compiled and run on may systems since then: SPARCstation LX SunOS
+4.x & Solaris 2.5, FreeBSD 2.1, Sun Ultra 60 Solaris 10 w/Sun Studio 12 (as I'm
+typing ...), CentOS 7, and Ubuntu 22.04, so there may be references in the code
+back to then when RCS was being used.
+
+All code was indented using GNU indent(1) as "indent --k-and-r-style -l130 <file>"
+
+--------------------------------------------------------------------------------
+                        Technical Summary
+--------------------------------------------------------------------------------
+The library isolates the user nodes from the internal tree nodes to prevent
+corruption.  User space code cannot directly access the internal library data
+structures.  Copies of nodes are passed in/out via the API parameters.  Each
+tree header keeps a free list of available to reuse up to a limit (256 max with
+the bitmap fields). Upon deletion of each tree, all its nodes and the tree
+header is freed.
+
+Tree Header (see inc/struct.h):
+ o t_head is a global pointer to the linked list of trees (t_header).
+ o t_header.th_link is the link to the next tree.
+ o t_header.th_flist is a linked list of t_node, reusable nodes for this tree.
+ o t_header.th_root is the pointer to the root node of that tree, of type t_node.
+
+From the library viewpoint and implemenation, a tree node in the tree consists
+of a malloc'd chunk of memory that is the combination of BOTH t_node (see 
+inc/struct.h) and the users Leaf structure:
+
+      size = sizeof(t_node) + ph->th_usiz; /* th_usiz is users sizeof(Leaf)  */
+      if ((p = (t_node *) malloc(size)) == OUT_OF_MEM) ...
+
+From the users viewpoint and usage, a tree node is just their structure Leaf (as
+defined in their leaf.h) as that is all they know and see.
+
+Here is an ASCII representation of a node as borrowed from the demo program
+(with DEBUG_LIB_* enabled):
+     Command: addk
+     Tree name (8 char max): t1
+     Enter key (30 char max): foo
+     key [foo]
+     >>> ALLOCATING MEMORY FOR T_NODE AT 0x2dc00; 68 BYTES <<<
+                    +-------------+
+                    | M A L L O C |
+      (0x2dc00) ->  +-------------+ <== the library routines work
+                    |   t_node    |     at this level.
+                    | ( 32 bytes) |
+                    |      .      |
+      (0x2dc20) ->  +-------------+  <== pnl, p)ointer n)ode l)eaf
+                    |   leaf.h    |      the users structure to
+                    |  user data  |      work with, they see this.
+                    | ( 36 bytes) |
+                    |      .      |
+                    |      .      |
+                    |      .      |
+                    +-------------+
+     >>> memset AT LOCATION 0x2dc20 to 0; 36 BYTES <<<
+     >>> ALLOCATING MEMORY FOR T_NODE AT 0x2dc50; 68 BYTES <<<
+
+As you can see internally the tree node starts at 0x2dc00 and contains BOTH 
+t_node and the users Leaf. t_node contains the links for left/right/parent
+and other metadata.
+
+As long as you know one or the other, the t_node address or the Leaf address 
+it is just simple pointer math to cast to one or the other and access it. Once
+this is data structure is understood, the rest of the code is just tree
+manipulations centered around this design.
+
+--------------------------------------------------------------------------------
+                       Library Isolation from User
+--------------------------------------------------------------------------------
+The user does not have any access to the internal tree structures so they cannot
+corrupt it and remains isolated. This is done by the user having to fetch a new
+(to them) Leaf (to them) blank node (see above), fill in what they want, and
+pass their Leaf back into the correct function. The function then acts on it and
+in the case of adding, creates a new/reuses an internal t_node and copies the
+users data into the Leaf section and inserts that t_node into the tree.  After
+the API call the user is responsible to releasing the temporary node they used
+by calling:
+
+     bst_release(tn, pk);
+
+which will add the node to the free list or free it if the t_header.th_flist
+count is at maximum capacity.
+
+The ony time the library routine accesses the users Leaf storage area is to
+copy in or out to the node passed in into the API by the user.
+
+All memory allocation and deallocation is done through the module tmem.c
+
+--------------------------------------------------------------------------------
+          Basic Usage: get a node, update it, add it, release the node
+--------------------------------------------------------------------------------
+This is borrowed from demo.c, see demo.c on how to use ALL the API calls:
+
+          /* add_key: add a new key into the tree */
+          /* tn is the tree name, kn is the key */
+          void add_key(char *tn, char *kn)
+          {
+              Leaf *pk; /* user structure to pass containing key to find */
+          
+get a node    if ((pk = (Leaf *) bst_alloc(tn)) != NULL) {
+add its data      strcpy(pk->key, kn);
+add to tree       if (bst_put(tn, pk))
+                      printf("\n --- key added %s ---\n", kn);
+                  else {
+                      display_err_msg();
+                      printf("\n ### duplicate key ###\n");
+                  }
+free the node     bst_release(tn, pk);
+              } else {
+                  display_err_msg();
+                  printf("\n  ### Cannot add key %s to tree %s ###\n", kn, tn);
+              }
+          }
+
+
+--------------------------------------------------------------------------------
+                         Addendum
+--------------------------------------------------------------------------------
+The library is licensed under the GNU LESSER GENERAL PUBLIC LICENSE Version 3
+See https://www.gnu.org/licenses/lgpl-3.0.txt
+
+The programs are licensed under the GNU GENERAL PUBLIC LICENSE Version 3
+See https://www.gnu.org/licenses/gpl-3.0.txt
+

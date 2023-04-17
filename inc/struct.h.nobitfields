@@ -1,0 +1,56 @@
+/*
++------------------------------------------------------------------+
+| Copyright (C) 2023 Roger P. Johnson, roger0080@netscape.net      |
+|                                                                  |
+| This file is part of libbst.                                     |
+|                                                                  |
+| libbst is free software: you can redistribute it and/or modify   |
+| it under the terms of the GNU Lessor General Public License as   |
+| published by the Free Software Foundation, either version 3 of   |
+| the License, or (at your option) any later version.              |
+|                                                                  |
+| libbst is distributed in the hope that it will be useful, but    |
+| WITHOUT ANY WARRANTY; without even the implied warranty of       |
+| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the     |
+| GNU Lessor General Public License for more details.              |
+|                                                                  |
+| You should have received a copy of the GNU Lessor General Public |
+| License along with libbst. If not, see www.gnu.org/licenses.     |
++------------------------------------------------------------------+
+*/
+
+/* private library modules include this file for use of libbst.a */
+
+#define  MIN_TREE_NAME_LEN   1      /* min length for a tree name */
+#define  MAX_TREE_NAME_LEN   128    /* max length for a tree name */
+
+/* HEADER STRUCTURE FOR A BST TREE */
+struct header {	
+	char           th_name[MAX_TREE_NAME_LEN+1];	/* tree name */
+	struct header *th_link;				/* pointer to next tree */
+	struct node   *th_root;				/* pointer to root node */
+	struct node   *th_flist;			/* pointer to free list */
+	double         th_id;				/* tree/node timestamp id */
+	long int       th_ncnt;				/* number of nodes in tree */
+	int            th_usiz;				/* user data size */
+	int          (*th_ucf) (void *, void *);	/* pointer to user cmp function */
+	void         (*th_upf) (void *, int);		/* pointer to user function to print a node */
+	unsigned int   th_flcnt;			/* number of nodes in free list */
+	unsigned int   th_np;				/* no pointers in user's structure */
+	unsigned int   th_stat;				/* check status of tree for each ins/del */
+	int            th_bsttype;			/* what type of bst is this: avl or bst */
+	char           th_version_id[MAX_ID_LEN+1];	/* program version number */
+	int            th_reserved1;			/* reserved for later use */
+	int            th_reserved2;			/* reserved for later use */
+};
+
+/* HEADER STRUCTURE FOR A BST TREE NODE */
+struct node {
+	struct node   *tn_ulink;			/* pointer to parent */
+	struct node   *tn_llink;			/* pointer to left subtree */
+	struct node   *tn_rlink;			/* pointer to right subtree */
+	double         tn_id;				/* tree/node timestamp id */
+	signed int     tn_bf  ;				/* balance factor */
+	unsigned int   tn_tag ;				/* node is left or right subtree */
+	unsigned int   tn_rank;				/* number of nodes in left subtree + 1 */
+};
