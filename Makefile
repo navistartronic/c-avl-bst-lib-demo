@@ -119,9 +119,12 @@ ifeq ($(CC),gcc)
   # gcc on all platforms
   # code uses 0x%-5x to print pointer addresses but creates warnings
   # -Wno-format is equivalent to -Wformat=0,
-  #
+
   # valgrind: valgrind --leak-check=yes ./demo
   GCC_CFLAGS_VAL = -g -Wno-format -O0
+
+  # gcc profiler; ./demo; gprof ./demo
+  GCC_CFLAGS_PRO = -g -Wno-format -O0 -pg
 
   # development
   GCC_CFLAGS_DEV = -g -Wno-format
