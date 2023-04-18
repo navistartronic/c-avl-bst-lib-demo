@@ -1,5 +1,5 @@
-c-avl-bst-list-demo
-===================
+c-avl-bst-lib-demo
+==================
 
 Summary:
 --------
@@ -9,9 +9,9 @@ API's allowing the user to interact and watch the tree operations.
 
 TL;DR version:
 --------------
-   (Needs Linux with development tools: gmake(1), gcc(1), ar(1))
+   (Needs development tools: gmake(1), gcc(1), ar(1))
    $ git clone https://github.com/navistartronic/c-avl-bst-lib-demo.git
-   $ cd c-avl-bst-lib
+   $ cd c-avl-bst-lib-demo
    $ gmake all
    $ ./demo
    Version 1.0.0 Mon Apr 17 14:10:20 2023
