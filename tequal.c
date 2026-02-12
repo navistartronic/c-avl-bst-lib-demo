@@ -68,7 +68,7 @@ Boolean bst_equal(char *t1, char *t2)
 
     t_header *ph1, *ph2;
 
-    t_header *find_header(char *);	/* to retrieve the tree header record */
+    t_header *find_header(char *);      /* to retrieve the tree header record */
     Boolean twalk(TWalkOps op, Traversals order, ...);
 
 
@@ -77,41 +77,41 @@ Boolean bst_equal(char *t1, char *t2)
 
     /* Verify the length of the 1st tree name: */
     if (strlen(t1) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN_T1;
-	return (FALSE);
+        bst_errno = BST_ERR_NAME_LEN_T1;
+        return (FALSE);
     }
 
     /* Check if 1st tree is defined: */
     if ((ph1 = (t_header *) find_header(t1)) == NULL) {
-	bst_errno = BST_ERR_FIRST_TREE_UNDEF;
-	return (FALSE);
+        bst_errno = BST_ERR_FIRST_TREE_UNDEF;
+        return (FALSE);
     }
 
     /* Verify the length of the 2nd tree name: */
     if (strlen(t2) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN_T2;
-	return (FALSE);
+        bst_errno = BST_ERR_NAME_LEN_T2;
+        return (FALSE);
     }
 
     /* Check if 2nd tree is defined: */
     if ((ph2 = (t_header *) find_header(t2)) == NULL) {
-	bst_errno = BST_ERR_SECOND_TREE_UNDEF;
-	return (FALSE);
+        bst_errno = BST_ERR_SECOND_TREE_UNDEF;
+        return (FALSE);
     }
 
     /* Check if the users data size is the same for both trees. If so, there is still no  */
     /* guarentee that the structures are really the same -- which can cause a segmentaion */
     /* fault to occur:                                                                    */
     if (ph1->th_usiz != ph2->th_usiz) {
-	bst_errno = BST_ERR_TREES_NOT_SAME_FAMILY;
-	return (FALSE);
+        bst_errno = BST_ERR_TREES_NOT_SAME_FAMILY;
+        return (FALSE);
     }
 
     /* Check if the number of nodes in each tree are the same as an easy check:        */
     /* NOTE: if no check is made here, the routine twalk will not catch the difference */
     /*       when the condition nodecnt(t1) < nodecount(t2) is true.                   */
     if (ph1->th_ncnt != ph2->th_ncnt)
-	return (FALSE);
+        return (FALSE);
 
     /* Make the comparison call: */
     return (twalk(EQUAL, PREORDER, ph1, ph2));

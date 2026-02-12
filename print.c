@@ -65,57 +65,57 @@ void bst_print(char *tname)
 
     /* check if tree is even defined */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return;
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return;
     }
 
     /* now check if user has passed a printing function for this tree */
     if (ph->th_upf == NULL) {
-	bst_errno = BST_ERR_NO_UPF_GIVEN;
-	return;
+        bst_errno = BST_ERR_NO_UPF_GIVEN;
+        return;
     }
 
     /* any nodes in tree to traverse? */
     if (ph->th_root == NULL) {
-	ph->th_upf(NULL, -1);
-	return;
+        ph->th_upf(NULL, -1);
+        return;
     }
 
     p = ph->th_root;
     done = FALSE;
     while (!done) {
-	end_of_right_branch = FALSE;
-	while (!end_of_right_branch) {
-	    if (p->tn_rlink != NULL) {
-		p = p->tn_rlink;
-		depth++;
-	    } else
-		end_of_right_branch = TRUE;
-	}
-	try_going_right = FALSE;
-	while (!try_going_right && !done) {
-	    ph->th_upf(((t_node *) p) + 1, depth);
-	    /* printf("%i;depth = %i\n",p->data,depth); */
-	    if (p->tn_llink != NULL) {
-		p = p->tn_llink;
-		depth++;
-		try_going_right = TRUE;
-	    }
-	    if (!try_going_right) {
-		time_to_go_left = FALSE;
-		while (!done && !time_to_go_left) {
-		    if (!done) {
-			depth--;
-			if (p->tn_tag == ROOT)
-			    done = TRUE;
-			else if (p->tn_tag == RIGHT_SON) {
-			    time_to_go_left = TRUE;
-			    try_going_right = FALSE;
-			}
-			p = p->tn_ulink;
-		    }
-		}
-	    }
-	}
+        end_of_right_branch = FALSE;
+        while (!end_of_right_branch) {
+            if (p->tn_rlink != NULL) {
+                p = p->tn_rlink;
+                depth++;
+            } else
+                end_of_right_branch = TRUE;
+        }
+        try_going_right = FALSE;
+        while (!try_going_right && !done) {
+            ph->th_upf(((t_node *) p) + 1, depth);
+            /* printf("%i;depth = %i\n",p->data,depth); */
+            if (p->tn_llink != NULL) {
+                p = p->tn_llink;
+                depth++;
+                try_going_right = TRUE;
+            }
+            if (!try_going_right) {
+                time_to_go_left = FALSE;
+                while (!done && !time_to_go_left) {
+                    if (!done) {
+                        depth--;
+                        if (p->tn_tag == ROOT)
+                            done = TRUE;
+                        else if (p->tn_tag == RIGHT_SON) {
+                            time_to_go_left = TRUE;
+                            try_going_right = FALSE;
+                        }
+                        p = p->tn_ulink;
+                    }
+                }
+            }
+        }
     }
 }

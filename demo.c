@@ -105,15 +105,15 @@
  **               FOR DEBUGGING AND TESTING ONLY                       **
  ************************************************************************/
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-  #define  MAX_ID_LEN          32	/* program version number */
+  #define  MAX_ID_LEN          32       /* program version number */
   /* included only for debugging or temp TODO on treewalk */
   #include "struct.h"
   typedef struct header t_header;
   typedef struct node t_node;
 #endif
 
-#define  MAX_TREENAME_LENGTH   8	/* max length for a tree name;  */
-#define  MAX_CMD_LEN           64	/* buffer size for command */
+#define  MAX_TREENAME_LENGTH   8        /* max length for a tree name;  */
+#define  MAX_CMD_LEN           64       /* buffer size for command */
 
 typedef enum { DELETE, COPY, VISIT, IDENT, EQUAL } TWalkOps;
 
@@ -137,15 +137,15 @@ void display_err_msg(void);
 
 int main(int argc, char *argv[])
 {
-    void display_intro(void);	/* display greeting to user */
-    void display_screen(void);	/* display standard screen */
-    ValidCmd get_cmd(void);	/* get and validate user command */
-    int process_cmd(ValidCmd);	/* process user command */
-    void display_ending(void);	/* display end of program message */
+    void display_intro(void);   /* display greeting to user */
+    void display_screen(void);  /* display standard screen */
+    ValidCmd get_cmd(void);     /* get and validate user command */
+    int process_cmd(ValidCmd);  /* process user command */
+    void display_ending(void);  /* display end of program message */
 
     display_intro();
     do
-	display_screen();
+        display_screen();
     while (process_cmd(get_cmd()));
     display_ending();
 
@@ -182,11 +182,11 @@ void display_intro(void)
     printf("Version %d.%d.%d %s\n", rev_major, rev_minor, rev_patch, buffer);
 
     if (0) {
-	printf("Here is a list of possible error numbers and messages:\n\n");
-	for (n = 100; n < 130; n++) {
-	    bst_errno = n;
-	    display_err_msg();
-	}
+        printf("Here is a list of possible error numbers and messages:\n\n");
+        for (n = 100; n < 130; n++) {
+            bst_errno = n;
+            display_err_msg();
+        }
     }
 }
 
@@ -235,59 +235,59 @@ void display_screen(void)
 /* get_cmd: prompt for command and validate it to a know state */
 ValidCmd get_cmd(void)
 {
-    char cmd[MAX_CMD_LEN + 1];	/* buffer to hold user's input in */
+    char cmd[MAX_CMD_LEN + 1];  /* buffer to hold user's input in */
 
     do {
-	printf("Command: ");
-	fflush(stdin);
-	fgets(cmd, MAX_CMD_LEN + 1, stdin);
-	cmd[strcspn(cmd, "\r\n")] = '\0';
+        printf("Command: ");
+        fflush(stdin);
+        fgets(cmd, MAX_CMD_LEN + 1, stdin);
+        cmd[strcspn(cmd, "\r\n")] = '\0';
     } while (strlen(cmd) == 0);
 
     if (strcmp("newt", cmd) == 0)
-	return (NEWT);
+        return (NEWT);
     else if (strcmp("addk", cmd) == 0)
-	return (ADDK);
+        return (ADDK);
     else if (strcmp("showt", cmd) == 0)
-	return (SHOWT);
+        return (SHOWT);
     else if (strcmp("delk", cmd) == 0)
-	return (DELK);
+        return (DELK);
     else if (strcmp("print", cmd) == 0)
-	return (PRINT);
+        return (PRINT);
     else if (strcmp("delt", cmd) == 0)
-	return (DELT);
+        return (DELT);
     else if (strcmp("count", cmd) == 0)
-	return (COUNT);
+        return (COUNT);
     else if (strcmp("isempty", cmd) == 0)
-	return (ISEMPTY);
+        return (ISEMPTY);
     else if (strcmp("ckt", cmd) == 0)
-	return (CKT);
+        return (CKT);
     else if (strcmp("stop", cmd) == 0)
-	return (STOP);
+        return (STOP);
     else if (strcmp("findk", cmd) == 0)
-	return (FINDK);
+        return (FINDK);
     else if (strcmp("rprint", cmd) == 0)
-	return (RPRINT);
+        return (RPRINT);
     else if (strcmp("def", cmd) == 0)
-	return (DEF);
+        return (DEF);
     else if (strcmp("stop", cmd) == 0)
-	return (STOP);
+        return (STOP);
     else if (strcmp("quit", cmd) == 0)
-	return (QUIT);
+        return (QUIT);
 #ifdef DEBUG_EXPLOIT_TREE_HDR
     else if (strcmp("stat", cmd) == 0)
-	return (STATS);
+        return (STATS);
     else if (strcmp("twalk", cmd) == 0)
-	return (TWALK);
+        return (TWALK);
 #endif
     else if (strcmp("copy", cmd) == 0)
-	return (TCOPY);
+        return (TCOPY);
     else if (strcmp("ident", cmd) == 0)
-	return (TIDENT);
+        return (TIDENT);
     else if (strcmp("equal", cmd) == 0)
-	return (TEQUAL);
+        return (TEQUAL);
     else
-	return (UNKNOWN);
+        return (UNKNOWN);
 }
 
 /* process_cmd: execute desired command */
@@ -317,117 +317,117 @@ int process_cmd(ValidCmd usrcmd)
     void stat_tree(char *);              /* print tree header record */
     void treewalk(char *);               /* traverse tree in 3 ways */
 #endif
-    void tcopy(char *);	                 /* duplicate an existing tree */
+    void tcopy(char *);                  /* duplicate an existing tree */
     void tident(char *);                 /* are two trees identical in structure */
     void tequal(char *);                 /* are two trees equal */
 
     if (usrcmd == QUIT) {
-	/* traverse through all the trees freeing each node */
-	delete_trees();
-	return (0);
+        /* traverse through all the trees freeing each node */
+        delete_trees();
+        return (0);
     }
 
     if (usrcmd == STOP)
-	/* abort, no clean up, no freed memory */
-	return (0);
+        /* abort, no clean up, no freed memory */
+        return (0);
 
     if (usrcmd == UNKNOWN) {
-	display_bad_cmd();
-	return (1);
+        display_bad_cmd();
+        return (1);
     }
 
     if (usrcmd != SHOWT) {
-	do {
-	    printf("Tree name (%d char max): ", MAX_TREENAME_LENGTH);
-	    fflush(stdin);
-	    fgets(tn, MAX_TREENAME_LENGTH + 1, stdin);
-	    tn[strcspn(tn, "\r\n")] = '\0';
-	} while (strlen(tn) == 0);
+        do {
+            printf("Tree name (%d char max): ", MAX_TREENAME_LENGTH);
+            fflush(stdin);
+            fgets(tn, MAX_TREENAME_LENGTH + 1, stdin);
+            tn[strcspn(tn, "\r\n")] = '\0';
+        } while (strlen(tn) == 0);
     }
 
     switch (usrcmd) {
     case NEWT:
-	do {
-	    printf("create new tree as an AVL tree or a BST Binary Search Tree [avl | bst] ? ");
-	    fgets(ttype, MAX_CMD_LEN, stdin);
-	    ttype[strcspn(ttype, "\r\n")] = '\0';
-	    if (strlen(ttype) && (strncmp(ttype, "avl", 3) != 0 && strncmp(ttype, "bst", 3) != 0)) {
-		printf(" invalid tree type, try again ..\n");
-		strcpy(ttype, "\0");
-	    }
-	} while (strlen(ttype) == 0);
-	/*printf("tree type [%s]\n", ttype); */
-	new_tree(tn, ttype);
-	break;
+        do {
+            printf("create new tree as an AVL tree or a BST Binary Search Tree [avl | bst] ? ");
+            fgets(ttype, MAX_CMD_LEN, stdin);
+            ttype[strcspn(ttype, "\r\n")] = '\0';
+            if (strlen(ttype) && (strncmp(ttype, "avl", 3) != 0 && strncmp(ttype, "bst", 3) != 0)) {
+                printf(" invalid tree type, try again ..\n");
+                strcpy(ttype, "\0");
+            }
+        } while (strlen(ttype) == 0);
+        /*printf("tree type [%s]\n", ttype); */
+        new_tree(tn, ttype);
+        break;
     case RPRINT:
-	rprint_tree(tn);
-	break;
+        rprint_tree(tn);
+        break;
     case PRINT:
-	print_tree(tn);
-	break;
+        print_tree(tn);
+        break;
     case COUNT:
-	node_count(tn);
-	break;
+        node_count(tn);
+        break;
     case ISEMPTY:
-	is_empty(tn);
-	break;
+        is_empty(tn);
+        break;
     case CKT:
-	check_tree(tn);
-	break;
+        check_tree(tn);
+        break;
 #ifdef DEBUG_EXPLOIT_TREE_HDR
     case STATS:
-	stat_tree(tn);
-	break;
+        stat_tree(tn);
+        break;
 #endif
     case DELT:
-	delete_tree(tn);
-	break;
+        delete_tree(tn);
+        break;
     case SHOWT:
-	show_trees();
-	break;
+        show_trees();
+        break;
     case ADDK:
     case FINDK:
     case DELK:
-	do {
-	    printf("Enter key (%d char max): ", LEAF_KEYLEN);
-	    fflush(stdin);
-	    fgets(kn, LEAF_KEYLEN + 2, stdin);
-	    kn[strcspn(kn, "\r\n")] = '\0';
-	} while (strlen(kn) == 0);
-	printf("key [%s]\n", kn);
+        do {
+            printf("Enter key (%d char max): ", LEAF_KEYLEN);
+            fflush(stdin);
+            fgets(kn, LEAF_KEYLEN + 2, stdin);
+            kn[strcspn(kn, "\r\n")] = '\0';
+        } while (strlen(kn) == 0);
+        printf("key [%s]\n", kn);
 
-	switch (usrcmd) {
-	case ADDK:
-	    add_key(tn, kn);
-	    break;
-	case FINDK:
-	    find_key(tn, kn);
-	    break;
-	case DELK:
-	    delete_key(tn, kn);
-	    break;
-	}
-	break;
+        switch (usrcmd) {
+        case ADDK:
+            add_key(tn, kn);
+            break;
+        case FINDK:
+            find_key(tn, kn);
+            break;
+        case DELK:
+            delete_key(tn, kn);
+            break;
+        }
+        break;
     case DEF:
-	is_defined(tn);
-	break;
+        is_defined(tn);
+        break;
 #ifdef DEBUG_EXPLOIT_TREE_HDR
     case TWALK:
-	treewalk(tn);
-	break;
+        treewalk(tn);
+        break;
 #endif
     case TCOPY:
-	tcopy(tn);
-	break;
+        tcopy(tn);
+        break;
     case TIDENT:
-	tident(tn);
-	break;
+        tident(tn);
+        break;
     case TEQUAL:
-	tequal(tn);
-	break;
+        tequal(tn);
+        break;
     case UNKNOWN:
-	display_bad_cmd();
-	break;
+        display_bad_cmd();
+        break;
     }
     return (1);
 }
@@ -445,15 +445,15 @@ void new_tree(char *tn, char *tt)
     void Print_Node(Leaf *, int);       /* user written tree printing routine (optional) */
 
     if (strncmp(tt, "avl", 3) && strncmp(tt, "bst", 3)) {
-	printf("\n  ### Can't create tree %s -- invalid tree type [%s]###\n", tn, tt);
-	return;
+        printf("\n  ### Can't create tree %s -- invalid tree type [%s]###\n", tn, tt);
+        return;
     }
 
     if (bst_create(tn, strncmp(tt, "avl", 3) == 0 ? AVL : BST, sizeof(Leaf), FALSE, f, Print_Node, TREE_VERIFY_YES)) {
-	printf("\n  --- tree [%s] created as [%s] ---\n", tn, tt);
+        printf("\n  --- tree [%s] created as [%s] ---\n", tn, tt);
     } else {
-	display_err_msg();
-	printf("\n  ### Can't create tree [%s] ###\n", tn);
+        display_err_msg();
+        printf("\n  ### Can't create tree [%s] ###\n", tn);
     }
 }
 
@@ -462,8 +462,8 @@ void rprint_tree(char *tn)
 {
     bst_rprint(tn);
     if (bst_errno != 0) {
-	display_err_msg();
-	printf("\n  ### Can't print tree %s ###\n", tn);
+        display_err_msg();
+        printf("\n  ### Can't print tree %s ###\n", tn);
     }
 }
 
@@ -472,8 +472,8 @@ void print_tree(char *tn)
 {
     bst_print(tn);
     if (bst_errno != 0) {
-	display_err_msg();
-	printf("\n  ### Can't print tree %s ###\n", tn);
+        display_err_msg();
+        printf("\n  ### Can't print tree %s ###\n", tn);
     }
 }
 
@@ -483,10 +483,10 @@ void node_count(char *tn)
     int n;
 
     if ((n = bst_count(tn)) < 0) {
-	display_err_msg();
-	printf("\n  ### Tree not defined %s ###\n", tn);
+        display_err_msg();
+        printf("\n  ### Tree not defined %s ###\n", tn);
     } else
-	printf("\n  --- Tree %s has %i node(s) ---\n", tn, n);
+        printf("\n  --- Tree %s has %i node(s) ---\n", tn, n);
 }
 
 
@@ -494,11 +494,11 @@ void node_count(char *tn)
 void is_empty(char *tn)
 {
     if (bst_empty(tn)) {
-	if (bst_errno != 0)
-	    display_err_msg();
-	printf("\n  --- TRUE ---\n");
+        if (bst_errno != 0)
+            display_err_msg();
+        printf("\n  --- TRUE ---\n");
     } else
-	printf("\n  --- FALSE ---\n");
+        printf("\n  --- FALSE ---\n");
 }
 
 /* check_tree: perform tree verification; tn_tags, bf's & links (DEBUGGING ONLY) */
@@ -506,21 +506,21 @@ void check_tree(char *tn)
 {
     bst_stat(tn);
     if (bst_errno != 0)
-	display_err_msg();
+        display_err_msg();
     else
-	printf("\n  --- verified  ---\n");
+        printf("\n  --- verified  ---\n");
 }
 
 /* delete_tree: delete all nodes and the tree definition itself */
 void delete_tree(char *tn)
 {
-    Leaf *pk;			/* structure to pass containing key to find */
+    Leaf *pk;                   /* structure to pass containing key to find */
 
     if (bst_delete(tn))
-	printf(" --- Tree Deleted ---\n");
+        printf(" --- Tree Deleted ---\n");
     else {
-	display_err_msg();
-	printf("\n ### Can't delete tree %s ###\n", tn);
+        display_err_msg();
+        printf("\n ### Can't delete tree %s ###\n", tn);
     }
 }
 
@@ -541,12 +541,12 @@ void show_trees(void)
     find_header_list(&strings, &size);
     printf("Defined Trees (%d):\n", size);
     if (size == 0) {
-	printf("\tNo trees defined.\n");
+        printf("\tNo trees defined.\n");
     } else {
-	for (i = 0; i < size; i++) {
-	    printf("\t%5d\t%s\n", i + 1, strings[i]);
-	    free(strings[i]);
-	}
+        for (i = 0; i < size; i++) {
+            printf("\t%5d\t%s\n", i + 1, strings[i]);
+            free(strings[i]);
+        }
     }
 
     free(strings);
@@ -567,14 +567,14 @@ void delete_trees(void)
 
     find_header_list(&strings, &size);
     if (size == 0) {
-	//printf("cleanup: no trees defined to delete.\n");
+        //printf("cleanup: no trees defined to delete.\n");
     } else {
-	printf("cleanup: %d defined tree(s) to delete\n", size);
-	for (i = 0; i < size; i++) {
-	    printf("cleanup: deleting tree %5d\t%s\n", i + 1, strings[i]);
-	    delete_tree(strings[i]);
-	    free(strings[i]);
-	}
+        printf("cleanup: %d defined tree(s) to delete\n", size);
+        for (i = 0; i < size; i++) {
+            printf("cleanup: deleting tree %5d\t%s\n", i + 1, strings[i]);
+            delete_tree(strings[i]);
+            free(strings[i]);
+        }
     }
 
     free(strings);
@@ -585,20 +585,20 @@ void delete_trees(void)
 /* add_key: add a new key into the tree */
 void add_key(char *tn, char *kn)
 {
-    Leaf *pk;			/* structure to pass containing key to find */
+    Leaf *pk;                   /* structure to pass containing key to find */
 
     if ((pk = (Leaf *) bst_alloc(tn)) != NULL) {
-	strcpy(pk->key, kn);
-	if (bst_put(tn, pk))
-	    printf("\n --- key added %s ---\n", kn);
-	else {
-	    display_err_msg();
-	    printf("\n ### duplicate key ###\n");
-	}
-	bst_release(tn, pk);
+        strcpy(pk->key, kn);
+        if (bst_put(tn, pk))
+            printf("\n --- key added %s ---\n", kn);
+        else {
+            display_err_msg();
+            printf("\n ### duplicate key ###\n");
+        }
+        bst_release(tn, pk);
     } else {
-	display_err_msg();
-	printf("\n  ### Cannot add key %s to tree %s ###\n", kn, tn);
+        display_err_msg();
+        printf("\n  ### Cannot add key %s to tree %s ###\n", kn, tn);
     }
 }
 
@@ -608,18 +608,18 @@ void find_key(char *tn, char *kn)
     Leaf *pnl, *l;
 
     if (bst_defined(tn)) {
-	pnl = (Leaf *) bst_alloc(tn);
-	strcpy(pnl->key, kn);
-	if ((l = (Leaf *) bst_get(tn, pnl)) == NULL) {
-	    display_err_msg();
-	    printf("\n  ### key not found %s ###\n", kn);
-	} else {
-	    printf("\n  --- key found %s ---\n", kn);
-	    bst_release(tn, l);
-	}
-	bst_release(tn, pnl);
+        pnl = (Leaf *) bst_alloc(tn);
+        strcpy(pnl->key, kn);
+        if ((l = (Leaf *) bst_get(tn, pnl)) == NULL) {
+            display_err_msg();
+            printf("\n  ### key not found %s ###\n", kn);
+        } else {
+            printf("\n  --- key found %s ---\n", kn);
+            bst_release(tn, l);
+        }
+        bst_release(tn, pnl);
     } else
-	printf("\n  ### Tree not defined %s ###\n", tn);
+        printf("\n  ### Tree not defined %s ###\n", tn);
 }
 
 /* delete_key: remove a key from the tree */
@@ -628,17 +628,17 @@ void delete_key(char *tn, char *kn)
     Leaf *pnl;
 
     if (bst_defined(tn)) {
-	pnl = (Leaf *) bst_alloc(tn);
-	strcpy(pnl->key, kn);
-	if (bst_remove(tn, pnl)) {
-	    printf("\n  --- key deleted %s ---\n", kn);
-	} else {
-	    display_err_msg();
-	    printf("\n  ### key not found %s ###\n", kn);
-	}
-	bst_release(tn, pnl);
+        pnl = (Leaf *) bst_alloc(tn);
+        strcpy(pnl->key, kn);
+        if (bst_remove(tn, pnl)) {
+            printf("\n  --- key deleted %s ---\n", kn);
+        } else {
+            display_err_msg();
+            printf("\n  ### key not found %s ###\n", kn);
+        }
+        bst_release(tn, pnl);
     } else
-	printf("\n  ### Tree not defined %s ###\n", tn);
+        printf("\n  ### Tree not defined %s ###\n", tn);
 
 }
 
@@ -646,10 +646,10 @@ void delete_key(char *tn, char *kn)
 void is_defined(char *tn)
 {
     if (bst_defined(tn))
-	printf("\n  --- TRUE ---\n");
+        printf("\n  --- TRUE ---\n");
     else {
-	display_err_msg();
-	printf("\n  --- FALSE ---\n");
+        display_err_msg();
+        printf("\n  --- FALSE ---\n");
     }
 }
 
@@ -659,18 +659,18 @@ void tequal(char *tn)
     char ntn[MAX_TREENAME_LENGTH + 1];
 
     do {
-	printf("Compare Tree: ");
-	fflush(stdin);
-	fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
-	ntn[strcspn(ntn, "\r\n")] = '\0';
+        printf("Compare Tree: ");
+        fflush(stdin);
+        fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
+        ntn[strcspn(ntn, "\r\n")] = '\0';
     } while (strlen(ntn) == 0);
 
     if (bst_equal(tn, ntn))
-	printf("\n  --- Trees %s & %s are equal ---\n", tn, ntn);
+        printf("\n  --- Trees %s & %s are equal ---\n", tn, ntn);
     else {
-	if (bst_errno != 0)
-	    display_err_msg();
-	printf("\n  ### Trees %s, %s are not equal ###\n", tn, ntn);
+        if (bst_errno != 0)
+            display_err_msg();
+        printf("\n  ### Trees %s, %s are not equal ###\n", tn, ntn);
     }
 }
 
@@ -680,18 +680,18 @@ void tident(char *tn)
     char ntn[MAX_TREENAME_LENGTH + 1];
 
     do {
-	printf("Compare Tree: ");
-	fflush(stdin);
-	fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
-	ntn[strcspn(ntn, "\r\n")] = '\0';
+        printf("Compare Tree: ");
+        fflush(stdin);
+        fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
+        ntn[strcspn(ntn, "\r\n")] = '\0';
     } while (strlen(ntn) == 0);
 
     if (bst_ident(tn, ntn))
-	printf("\n  --- Trees %s & %s are identical ---\n", tn, ntn);
+        printf("\n  --- Trees %s & %s are identical ---\n", tn, ntn);
     else {
-	if (bst_errno != 0)
-	    display_err_msg();
-	printf("\n  ### Trees %s, %s are not identical ###\n", tn, ntn);
+        if (bst_errno != 0)
+            display_err_msg();
+        printf("\n  ### Trees %s, %s are not identical ###\n", tn, ntn);
     }
 }
 
@@ -701,18 +701,18 @@ void tcopy(char *tn)
     char ntn[MAX_TREENAME_LENGTH + 1];
 
     do {
-	printf("Copy to name: ");
-	fflush(stdin);
-	fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
-	ntn[strcspn(ntn, "\r\n")] = '\0';
+        printf("Copy to name: ");
+        fflush(stdin);
+        fgets(ntn, MAX_TREENAME_LENGTH + 1, stdin);
+        ntn[strcspn(ntn, "\r\n")] = '\0';
     } while (strlen(ntn) == 0);
 
     if (bst_copy(tn, ntn))
-	printf("\n  tree copied\n");
+        printf("\n  tree copied\n");
     else {
-	if (bst_errno != 0)
-	    display_err_msg();
-	printf("\n  can't copy %s\n", tn);
+        if (bst_errno != 0)
+            display_err_msg();
+        printf("\n  can't copy %s\n", tn);
     }
 }
 
@@ -731,32 +731,32 @@ void treewalk(char *tn)
     /* TODO bst_treewalk(tn, treeorder,userfunction); */
 
     if ((ph = (t_header *) find_header(tn)) == NULL) {;
-	display_err_msg();
-	printf("\n ### tree not defined %s ###\n", tn);
+        display_err_msg();
+        printf("\n ### tree not defined %s ###\n", tn);
     } else {
-	do {
-	    printf("1 = inorder, 2 = preorder, 3 = postorder; which ? ");
-	    fflush(stdin);
-	    fgets(buf, MAX_CMD_LEN + 1, stdin);
-	    buf[strcspn(buf, "\r\n")] = '\0';
-	} while (strlen(buf) == 0 || atoi(buf) < 1 || atoi(buf) > 3);
-	ttraversal = atoi(buf);
-	printf("tree walk = [%d]\n", ttraversal);
+        do {
+            printf("1 = inorder, 2 = preorder, 3 = postorder; which ? ");
+            fflush(stdin);
+            fgets(buf, MAX_CMD_LEN + 1, stdin);
+            buf[strcspn(buf, "\r\n")] = '\0';
+        } while (strlen(buf) == 0 || atoi(buf) < 1 || atoi(buf) > 3);
+        ttraversal = atoi(buf);
+        printf("tree walk = [%d]\n", ttraversal);
 
-	switch (ttraversal) {
-	    /* pass in a user defined function for the routine to call using the current leaf node data: */
-	case 1:
-	    twalk(VISIT, INORDER, ph->th_root, Treewalk_Print_Node);
-	    break;
-	case 2:
-	    twalk(VISIT, PREORDER, ph->th_root, Treewalk_Print_Node);
-	    break;
-	case 3:
-	    twalk(VISIT, POSTORDER, ph->th_root, Treewalk_Print_Node);
-	    break;
-	default:
-	    twalk(VISIT, INORDER, ph->th_root, Treewalk_Print_Node);
-	}
+        switch (ttraversal) {
+            /* pass in a user defined function for the routine to call using the current leaf node data: */
+        case 1:
+            twalk(VISIT, INORDER, ph->th_root, Treewalk_Print_Node);
+            break;
+        case 2:
+            twalk(VISIT, PREORDER, ph->th_root, Treewalk_Print_Node);
+            break;
+        case 3:
+            twalk(VISIT, POSTORDER, ph->th_root, Treewalk_Print_Node);
+            break;
+        default:
+            twalk(VISIT, INORDER, ph->th_root, Treewalk_Print_Node);
+        }
     }
 }
 #endif
@@ -770,8 +770,8 @@ void stat_tree(char *tn)
     extern t_header *find_header(char *tname);
 
     if ((ph = (t_header *) find_header(tn)) == NULL) {
-	printf("\n### tree not defined ###\n\n");
-	return;
+        printf("\n### tree not defined ###\n\n");
+        return;
     }
     printf("\n");
     printf("size of this structure = %i\n", sizeof(t_header));
@@ -809,26 +809,26 @@ void display_bad_cmd(void)
     r /= 1000;
 
     if (0) {
-	if (r < 1)
-	    printf(" uh?\n");
-	else if (r < 2)
-	    printf(" what?\n");
-	else if (r < 3)
-	    printf(" say what?\n");
-	else if (r < 4)
-	    printf(" what'da?\n");
-	else if (r < 5)
-	    printf(" eh?\n");
-	else if (r < 6)
-	    printf(" who? me?\n");
-	else if (r < 7)
-	    printf(" what'da mean ?\n");
-	else if (r < 8)
-	    printf(" oh sure...\n");
-	else if (r < 9)
-	    printf(" ouch!\n");
-	else
-	    printf(" yeah right!\n");
+        if (r < 1)
+            printf(" uh?\n");
+        else if (r < 2)
+            printf(" what?\n");
+        else if (r < 3)
+            printf(" say what?\n");
+        else if (r < 4)
+            printf(" what'da?\n");
+        else if (r < 5)
+            printf(" eh?\n");
+        else if (r < 6)
+            printf(" who? me?\n");
+        else if (r < 7)
+            printf(" what'da mean ?\n");
+        else if (r < 8)
+            printf(" oh sure...\n");
+        else if (r < 9)
+            printf(" ouch!\n");
+        else
+            printf(" yeah right!\n");
     }
 
     printf(" bad command\n");
@@ -837,7 +837,7 @@ void display_bad_cmd(void)
 
 /* display_err_msg: display the error message corresponding to the current bst_errno number */
 void display_err_msg(void)
-{				/* prints out the error msg. corresponding to bst_errno */
+{                               /* prints out the error msg. corresponding to bst_errno */
     printf("  caused BST error %4i: %s\n", bst_errno, bst_errmsg(bst_errno));
 }
 
@@ -849,11 +849,11 @@ int f(Leaf *r1, Leaf *r2)
     ** NEGATIVE IF a < b; ZERO IF a = b; POSITIVE IF a > b                          **
     *********************************************************************************/
     if (strcmp(r1->key, r2->key) < 0)
-	return (-1);
+        return (-1);
     else if (strcmp(r1->key, r2->key) == 0)
-	return (0);
+        return (0);
     else
-	return (1);
+        return (1);
 }
 
 /* Print_Node: user written tree print routing (optional); (this one has debugging info in it */
@@ -864,7 +864,7 @@ void Print_Node(Leaf *pl, int level)
     ** OF THE TREE AS PLAIN/FANCY AS YOU WISH                                             **
     ***************************************************************************************/
 
-#define TAB_COL   30		/* which column to print the debugging info in */
+#define TAB_COL   30            /* which column to print the debugging info in */
 
 #ifdef DEBUG_EXPLOIT_TREE_HDR
     /* user space should not know about this detail, how to get to the tree header record */
@@ -876,31 +876,31 @@ void Print_Node(Leaf *pl, int level)
     int j;
 
     if (level < 0)
-	printf("/\n");
+        printf("/\n");
     else {
-	if (level == 0) {
-	    printf("/ ");
-	    if (pl == NULL) {
-		printf("<null>\n");
-		return;
-	    }
-	} else
-	    printf("  ");
+        if (level == 0) {
+            printf("/ ");
+            if (pl == NULL) {
+                printf("<null>\n");
+                return;
+            }
+        } else
+            printf("  ");
 
-	for (j = 1; j < 4 * level + 3; j++)
-	    putchar(' ');
+        for (j = 1; j < 4 * level + 3; j++)
+            putchar(' ');
 
-	printf("[%2s]", pl->key);
-	for (j = 4 * level + 5; j < TAB_COL; j++)
-	    putchar(' ');
+        printf("[%2s]", pl->key);
+        for (j = 4 * level + 5; j < TAB_COL; j++)
+            putchar(' ');
 
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-	/* user space should not know about this detail, how to get to the tree header record */
-	pn = ((t_node *) pl) - 1;
+        /* user space should not know about this detail, how to get to the tree header record */
+        pn = ((t_node *) pl) - 1;
 
-	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
+        printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
 
-	printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
+        printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
 #endif
     }
 }
@@ -908,8 +908,8 @@ void Print_Node(Leaf *pl, int level)
 void Treewalk_Print_Node(Leaf *pl, int level)
 {
     if (pl == NULL) {
-	printf("(Treewalk_Print_Node():: level [%09d] key [%s]\n", level, "NULL");
+        printf("(Treewalk_Print_Node():: level [%09d] key [%s]\n", level, "NULL");
     } else {
-	printf("(Treewalk_Print_Node():: level [%09d] key [%s]\n", level, pl->key);
+        printf("(Treewalk_Print_Node():: level [%09d] key [%s]\n", level, pl->key);
     }
 }

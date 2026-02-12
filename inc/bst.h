@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define  BST_HDR    1		/* so only one include of this file */
+#define  BST_HDR    1           /* so only one include of this file */
 
 #define  VERSION_ID          "Revision 1"
 #define  TREE_NOT_DEFINED    NULL

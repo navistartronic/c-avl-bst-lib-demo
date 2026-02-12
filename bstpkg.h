@@ -45,7 +45,7 @@ extern Boolean bst_put(char *, void *);
 extern void bst_rprint(char *);
 extern Boolean bst_remove(char *, void *);
 extern Boolean bst_release(char *, void *);
-extern void bst_stat(char *);	/* debugging purposes only; remove when done */
+extern void bst_stat(char *);   /* debugging purposes only; remove when done */
 
 /* TODO extern void bst_trees  (void); */ /* return array of defined trees */
 /* TODO extern char[] bst_treewalk(tn, treeorder,userfunction); */

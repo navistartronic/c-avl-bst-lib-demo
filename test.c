@@ -67,7 +67,7 @@
  **               FOR DEBUGGING AND TESTING ONLY                        **
  ************************************************************************/
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-  #define  MAX_ID_LEN          32	/* defined in bst.h */
+  #define  MAX_ID_LEN          32       /* defined in bst.h */
   /* included only for debugging or temp TODO on treewalk */
   #include "struct.h"
   typedef struct header t_header;
@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
     /*if (bst_create(tn, AVL, sizeof(Leaf), FALSE, f, Print_Node, TREE_VERIFY_NO) == FALSE) { */
     /*if (bst_create(tn, AVL, sizeof(Leaf), FALSE, f, Print_Node, TREE_VERIFY_YES) == FALSE) { */
     if (bst_create(tn, AVL, sizeof(Leaf), FALSE, f, Print_Node, TREE_VERIFY_NO) == FALSE) {
-	printf("   ### unable to create bst tree ###\n\n");
-	return 0;
+        printf("   ### unable to create bst tree ###\n\n");
+        return 0;
     }
     printf("--- tree defined: '%s' ---\n\n", tn);
 
@@ -141,63 +141,63 @@ int main(int argc, char *argv[])
 
     printf("----------------------begin insertion of [%d] records ---------------------------\n\n", ARRSIZ);
     for (i = 0; i < ARRSIZ; i++) {
-	do {
-	    /*randnum = rand(); */
-	    rand1 = rand();
-	    rand2 = rand();
-	    memset(chari, '\0', LEAF_KEYLEN + 1);
-	    /*itoa(randnum, chari); */
-	    /*sprintf(chari, "%d", randnum); */
-	    /* key content formats, two random numbers, period or "decimal" is meaningless, just a seperator */
-	    sprintf(chari, "%d%d", rand1, rand2);
-	    /* sprintf(chari, "%d.%d", rand1,rand2); */
-	    /*sprintf(chari, "%X.%X", rand1,rand2); */
-	    /*printf("random number (int) [%d]  as (string) [%s]\n", randnum, chari); */
-	    memset(pnl->key, '\0', LEAF_KEYLEN + 1);
-	    strncpy(pnl->key, chari, LEAF_KEYLEN);
-	} while (bst_put(tn, pnl) == FALSE);
+        do {
+            /*randnum = rand(); */
+            rand1 = rand();
+            rand2 = rand();
+            memset(chari, '\0', LEAF_KEYLEN + 1);
+            /*itoa(randnum, chari); */
+            /*sprintf(chari, "%d", randnum); */
+            /* key content formats, two random numbers, period or "decimal" is meaningless, just a seperator */
+            sprintf(chari, "%d%d", rand1, rand2);
+            /* sprintf(chari, "%d.%d", rand1,rand2); */
+            /*sprintf(chari, "%X.%X", rand1,rand2); */
+            /*printf("random number (int) [%d]  as (string) [%s]\n", randnum, chari); */
+            memset(pnl->key, '\0', LEAF_KEYLEN + 1);
+            strncpy(pnl->key, chari, LEAF_KEYLEN);
+        } while (bst_put(tn, pnl) == FALSE);
 
-	if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
-	    printf("new node added %10d of %10d, rand1 [%d] rand2 [%d],  (string) key = [%s]\n", i, ARRSIZ, rand1, rand2, pnl->key);
-	/*printf("new node added %10d of %10d, randnum (int) [%d],  (string) key = [%s]\n", i, ARRSIZ, randnum, pnl->key); */
+        if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
+            printf("new node added %10d of %10d, rand1 [%d] rand2 [%d],  (string) key = [%s]\n", i, ARRSIZ, rand1, rand2, pnl->key);
+        /*printf("new node added %10d of %10d, randnum (int) [%d],  (string) key = [%s]\n", i, ARRSIZ, randnum, pnl->key); */
 
-	/* save the generated key into our array */
-	memset(arrkey[i], '\0', LEAF_KEYLEN + 1);
-	strncpy(arrkey[i], chari, LEAF_KEYLEN);
+        /* save the generated key into our array */
+        memset(arrkey[i], '\0', LEAF_KEYLEN + 1);
+        strncpy(arrkey[i], chari, LEAF_KEYLEN);
     }
     printf("------------------ end of insertion ---------------------\n\n\n");
 
     /* check if tree is still in balance after an insertion/rotation */
     /* check it once here since we have it turned off in bst_create(...,FALSE,...) above */
     if (1) {
-	printf("--------------------- begin check tree balance of [%d] records ------------------------\n", ARRSIZ);
-	bst_stat(tn);
-	if (bst_errno != 0)
-	    printf("bst_errno = %d\n");
-	else
-	    printf("success: tree still in balance\n");
-	printf("------------------ end of check tree balance ---------------------\n\n\n");
+        printf("--------------------- begin check tree balance of [%d] records ------------------------\n", ARRSIZ);
+        bst_stat(tn);
+        if (bst_errno != 0)
+            printf("bst_errno = %d\n");
+        else
+            printf("success: tree still in balance\n");
+        printf("------------------ end of check tree balance ---------------------\n\n\n");
     }
 
     printf("--------------------- begin find of [%d] records ------------------------\n", ARRSIZ);
 
     for (i = 0; i < ARRSIZ; i++) {
-	memset(pk->key, '\0', LEAF_KEYLEN + 1);
-	strcpy(pk->key, arrkey[i]);
-	if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
-	    printf("FIND KEY: pk->key = arrkey[%10d] = [%s]\n", i, arrkey[i]);
-	if ((l = (Leaf *) bst_get(tn, pk)) == NULL)
-	    printf("\007  ### KEY NOT FOUND: '%s' ###\n\n", pk->key);
+        memset(pk->key, '\0', LEAF_KEYLEN + 1);
+        strcpy(pk->key, arrkey[i]);
+        if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
+            printf("FIND KEY: pk->key = arrkey[%10d] = [%s]\n", i, arrkey[i]);
+        if ((l = (Leaf *) bst_get(tn, pk)) == NULL)
+            printf("\007  ### KEY NOT FOUND: '%s' ###\n\n", pk->key);
     }
     printf("------------------- end of find -------------------------\n\n\n");
 
     printf("------------------ begin tree print of [%d] records -----------------------\n", ARRSIZ);
     if (ARRSIZ < MAX_DISPLAY) {
-	bst_print(tn);
-	if (bst_errno != 0) {
-	    printf("  caused BST error %4d: %s\n", bst_errno, bst_errmsg(bst_errno));
-	    printf("\n  ### Can't print tree %s ###\n", tn);
-	}
+        bst_print(tn);
+        if (bst_errno != 0) {
+            printf("  caused BST error %4d: %s\n", bst_errno, bst_errmsg(bst_errno));
+            printf("\n  ### Can't print tree %s ###\n", tn);
+        }
     }
     printf("------------------- end of tree print -------------------------\n\n\n");
 
@@ -206,14 +206,14 @@ int main(int argc, char *argv[])
 
     lost = 0;
     for (i = 0; i < ARRSIZ; i++) {
-	memset(pk->key, '\0', LEAF_KEYLEN + 1);
-	strcpy(pk->key, arrkey[i]);
-	if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
-	    printf("DELETE KEY record [%10d] key [%s]\n", i, pk->key);
-	if (bst_remove(tn, pk) == FALSE) {
-	    printf("\n\n\007### CANNOT DELETE %s ###\n\n", pk->key);
-	    lost++;
-	}
+        memset(pk->key, '\0', LEAF_KEYLEN + 1);
+        strcpy(pk->key, arrkey[i]);
+        if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
+            printf("DELETE KEY record [%10d] key [%s]\n", i, pk->key);
+        if (bst_remove(tn, pk) == FALSE) {
+            printf("\n\n\007### CANNOT DELETE %s ###\n\n", pk->key);
+            lost++;
+        }
     }
     printf("----------------------end deletetion----------------------------\n\n\n");
 
@@ -229,14 +229,14 @@ void itoa(int n, char s[])
     int i, sign;
 
     if ((sign = n) < 0)
-	n = -n;
+        n = -n;
 
     i = 0;
     do {
-	s[i++] = n % 10 + '0';
+        s[i++] = n % 10 + '0';
     } while ((n /= 10) > 0);
     if (sign < 0)
-	s[i++] = '-';
+        s[i++] = '-';
     s[i] = '\0';
     reverse(s);
 }
@@ -246,20 +246,20 @@ void reverse(char s[])
     int c, i, j;
 
     for (i = 0, j = strlen(s) - 1; i < j; i++, j--) {
-	c = s[i];
-	s[i] = s[j];
-	s[j] = c;
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
     }
 }
 
 int f(Leaf *r1, Leaf *r2)
 {
     if (strcmp(r1->key, r2->key) < 0)
-	return -1;
+        return -1;
     else if (strcmp(r1->key, r2->key) == 0)
-	return 0;
+        return 0;
     else
-	return 1;
+        return 1;
 }
 
 
@@ -274,24 +274,24 @@ void Print_Node2(Leaf *pl, int level)
     int j;
 
     if (level < 0)
-	printf("/\n");
+        printf("/\n");
     else {
-	if (level == 0) {
-	    printf("/ ");
-	    if (pl == NULL) {
-		printf("<null>\n");
-		return;
-	    }
-	} else
-	    printf("  ");
-	pn = (t_node *) pl;
-	pn--;
-	for (j = 1; j < 4 *level + 3; j++)
-	    putchar(' ');
-	printf("[%s]", pl->key);
-	for (j = 4 * level + 5; j < TAB_COL; j++)
-	    putchar(' ');
-	printf ("(0x%-4x) LVL: %3i, BAL: %2i, TAG: %s (0x%-4x) (0x%-4x) (0x%-4x) \n\n", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : "rson", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
+        if (level == 0) {
+            printf("/ ");
+            if (pl == NULL) {
+                printf("<null>\n");
+                return;
+            }
+        } else
+            printf("  ");
+        pn = (t_node *) pl;
+        pn--;
+        for (j = 1; j < 4 *level + 3; j++)
+            putchar(' ');
+        printf("[%s]", pl->key);
+        for (j = 4 * level + 5; j < TAB_COL; j++)
+            putchar(' ');
+        printf ("(0x%-4x) LVL: %3i, BAL: %2i, TAG: %s (0x%-4x) (0x%-4x) (0x%-4x) \n\n", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : "rson", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
     }
 }
 */
@@ -304,14 +304,14 @@ void Print_Node(Leaf *pl, int level)
     ** OF THE TREE AS PLAIN/FANCY AS YOU WISH                                             **
     ***************************************************************************************/
 
-#define TAB_COL   30		/* which column to print the debugging info in */
+#define TAB_COL   30            /* which column to print the debugging info in */
 
 #ifdef DEBUG_EXPLOIT_TREE_HDR
     /* user space should not know about this detail, how to get to the tree header record */
     /* the following typedef is put in *only* for development purposes only */
     typedef
-	enum {
-	LEFT_SON, ROOT, RIGHT_SON
+        enum {
+        LEFT_SON, ROOT, RIGHT_SON
     } Tags;
 
 
@@ -321,30 +321,30 @@ void Print_Node(Leaf *pl, int level)
     int j;
 
     if (level < 0)
-	printf("/\n");
+        printf("/\n");
     else {
-	if (level == 0) {
-	    printf("/ ");
-	    if (pl == NULL) {
-		printf("<null>\n");
-		return;
-	    }
-	} else
-	    printf("  ");
+        if (level == 0) {
+            printf("/ ");
+            if (pl == NULL) {
+                printf("<null>\n");
+                return;
+            }
+        } else
+            printf("  ");
 
-	for (j = 1; j < 4 * level + 3; j++)
-	    putchar(' ');
+        for (j = 1; j < 4 * level + 3; j++)
+            putchar(' ');
 
-	printf("[%s]", pl->key);
-	for (j = 4 * level + 5; j < TAB_COL; j++)
-	    putchar(' ');
+        printf("[%s]", pl->key);
+        for (j = 4 * level + 5; j < TAB_COL; j++)
+            putchar(' ');
 
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-	/* user space should not know about this detail, how to get to the tree header record */
-	pn = ((t_node *) pl) - 1;
+        /* user space should not know about this detail, how to get to the tree header record */
+        pn = ((t_node *) pl) - 1;
 
-	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
-	printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
+        printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
+        printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
 #endif
     }
 }

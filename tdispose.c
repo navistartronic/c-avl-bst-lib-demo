@@ -61,26 +61,26 @@ void tdispose(t_header *ph)
     //printf("tdispose: tree nodes freed\n");
     /* Traverse the list of free nodes in the header, freeing all nodes: */
     for (pn = ph->th_flist; pn != EMPTY_LIST;) {
-	qn = pn;
-	pn = pn->tn_ulink;
-	tfreem(T_NODE, FREE, qn);
+        qn = pn;
+        pn = pn->tn_ulink;
+        tfreem(T_NODE, FREE, qn);
     }
 
     //printf("tdispose: free list in header freed\n");
     /* Find the header record position in the list of defined trees: */
     for (p = t_head, q = NULL, found = FALSE; p != NULL && !found;)
-	if (strcmp(p->th_name, ph->th_name) == IDENTICAL)
-	    found = TRUE;
-	else {
-	    q = p;
-	    p = p->th_link;
-	}
+        if (strcmp(p->th_name, ph->th_name) == IDENTICAL)
+            found = TRUE;
+        else {
+            q = p;
+            p = p->th_link;
+        }
 
     /* Unlink the tree record from the list of defined trees: */
     if (q == NULL)
-	t_head = p->th_link;
+        t_head = p->th_link;
     else
-	q->th_link = p->th_link;
+        q->th_link = p->th_link;
 
     /* Free the tree name and then the header record itself: */
     /*      free(ph->th_name);  */

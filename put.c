@@ -69,8 +69,8 @@ Boolean bst_put(char *tname, void *pl)
 
     /* Check if the tree is defined: */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (FALSE);
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (FALSE);
     }
 
     /* Set the pointer from the users data area to the header of the node: */
@@ -78,20 +78,20 @@ Boolean bst_put(char *tname, void *pl)
 
     /* Check if this node then belongs to this tree: */
     if (ph->th_id != pn->tn_id) {
-	bst_errno = BST_ERR_TREE_NODE_MISMATCH;
-	return (FALSE);
+        bst_errno = BST_ERR_TREE_NODE_MISMATCH;
+        return (FALSE);
     }
 
     /* Search tree and set pointers for place of insertion: */
     if (find_node(ph->th_root, pl, ph->th_ucf, &a, &f, &q) != NULL) {
-	bst_errno = BST_ERR_DUPLICATE_KEY;
-	return (FALSE);
+        bst_errno = BST_ERR_DUPLICATE_KEY;
+        return (FALSE);
     }
 
     /* Make an exact copy of the structure the user is inserting; this will then become */
     /* the node that is actually placed in the tree:                                    */
     if ((pcopy = (t_node *) tallocm(T_NODE, ph)) == NULL)
-	return (FALSE);
+        return (FALSE);
     memcpy(pcopy, pn, sizeof(t_node) + ph->th_usiz);
 #ifdef DEBUG_MALLAC_USAGE
     printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", pn, pcopy, sizeof(t_node) + ph->th_usiz);
@@ -99,14 +99,14 @@ Boolean bst_put(char *tname, void *pl)
 
     /* Link in the the copy node and rebalance the tree if necessary: */
     if (put_node(ph, pcopy, ph->th_ucf, a, q, &b, &d) == UNBALANCED)
-	if (ph->th_bsttype == AVL)
-	    rbal(&ph->th_root, a, f, q, b, d);
+        if (ph->th_bsttype == AVL)
+            rbal(&ph->th_root, a, f, q, b, d);
     ph->th_ncnt++;
 
     /* *_stat are left in for development purposes only; it verifies the condition of */
     /* the tree by traversing the whole tree checking for accuracy:                   */
     if (ph->th_bsttype == AVL && ph->th_stat)
-	bst_stat(tname);
+        bst_stat(tname);
 
     /* Successful node insertion: */
     return (TRUE);

@@ -54,14 +54,14 @@ t_header *find_header(char *tname)
 
     /* Verify the length of the copy to tree name: */
     if (strlen(tname) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN;
-	return (TREE_NOT_DEFINED);
+        bst_errno = BST_ERR_NAME_LEN;
+        return (TREE_NOT_DEFINED);
     }
 
     /* Search the linked list for the specified tree: */
     for (ph = t_head; ph != NULL; ph = ph->th_link)
-	if (strcmp(ph->th_name, tname) == IDENTICAL)
-	    return (ph);
+        if (strcmp(ph->th_name, tname) == IDENTICAL)
+            return (ph);
 
     return (TREE_NOT_DEFINED);
 }

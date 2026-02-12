@@ -67,19 +67,19 @@ void bst_rprint(char *tname)
     /* check if tree is even defined */
 
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return;
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return;
     }
     /* now check if user has passed a printing function for this tree */
 
     if (ph->th_upf == NULL) {
-	bst_errno = BST_ERR_NO_UPF_GIVEN;
-	return;
+        bst_errno = BST_ERR_NO_UPF_GIVEN;
+        return;
     }
     if (ph->th_root == NULL)
-	ph->th_upf(NULL, -1);
+        ph->th_upf(NULL, -1);
     else
-	inorderprint(ph->th_root, &depth, ph->th_usiz);
+        inorderprint(ph->th_root, &depth, ph->th_usiz);
 }
 
 
@@ -93,32 +93,32 @@ void inorderprint(t_node *p, int *k, int th_usiz)
     /* k is the level or depth at previous node in above level */
     /* th_usiz is the size of the users data area  */
 
-    int j;			/* j is the for-next var for indenting the node */
-    t_node *pcopy;		/* pointer to a copy of the user node in tree */
+    int j;                      /* j is the for-next var for indenting the node */
+    t_node *pcopy;              /* pointer to a copy of the user node in tree */
 
     extern void *tallocm(MallocTypes mkind, ...);
 
     /* which is passed to the users print function */
 
     if (p != NULL) {
-	(*k)++;			/* increment the level we're on */
-	inorderprint(p->tn_rlink, k, th_usiz);	/* take right branch to leaf  */
+        (*k)++;                 /* increment the level we're on */
+        inorderprint(p->tn_rlink, k, th_usiz);  /* take right branch to leaf  */
 
 
-	if ((pcopy = (t_node *) tallocm(T_NODE, ph)) == NULL) {
-	    bst_errno = BST_ERR_MALLOC;
-	    return;
-	}
-	memcpy(pcopy, p, sizeof(t_node) + th_usiz);
+        if ((pcopy = (t_node *) tallocm(T_NODE, ph)) == NULL) {
+            bst_errno = BST_ERR_MALLOC;
+            return;
+        }
+        memcpy(pcopy, p, sizeof(t_node) + th_usiz);
 #ifdef DEBUG_MALLAC_USAGE
-	printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, pcopy, sizeof(t_node) + th_usiz);
+        printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, pcopy, sizeof(t_node) + th_usiz);
 #endif
 
-	/* make call to user node print function */
+        /* make call to user node print function */
 
-	ph->th_upf(p + 1, *k);	/* pass node to user print function for printing */
+        ph->th_upf(p + 1, *k);  /* pass node to user print function for printing */
 
-	inorderprint(p->tn_llink, k, th_usiz);	/* take left branch now */
-	(*k)--;			/* decrement the level counter now that we're popping & going up */
-    }				/* if */
+        inorderprint(p->tn_llink, k, th_usiz);  /* take left branch now */
+        (*k)--;                 /* decrement the level counter now that we're popping & going up */
+    }                           /* if */
 }

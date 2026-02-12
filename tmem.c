@@ -71,75 +71,75 @@ void *tallocm(MallocTypes mkind, ...)
   *  bst_errno  : Global error varible. Set only if an error occurs
   *******************************************************************************/
 
-    int size;			/* bytes to allocate */
-    void *p;			/* generic pointer to a t_header or a t_node */
-    va_list ap;			/* formal function argument pointer */
-    Boolean error;		/* routine error flag */
-    t_header *ph;		/* pointer to a defined tree header record */
+    int size;                   /* bytes to allocate */
+    void *p;                    /* generic pointer to a t_header or a t_node */
+    va_list ap;                 /* formal function argument pointer */
+    Boolean error;              /* routine error flag */
+    t_header *ph;               /* pointer to a defined tree header record */
 
 #ifdef DEBUG_SHOWGRAPHS
     extern void gheader(t_header *ph);
     extern void gnode(t_header *ph, t_node *pn);
 #endif
 
-    error = FALSE;		/* initalize */
-    va_start(ap, mkind);	/* ap points to 1st argument now */
+    error = FALSE;              /* initalize */
+    va_start(ap, mkind);        /* ap points to 1st argument now */
 
     switch (mkind) {
-    case T_HEADER:		/* return a NEW tree header record */
-	size = (int) va_arg(ap, int);
-	if ((p = (void *) malloc(size)) == OUT_OF_MEM)
-	    error = TRUE;
+    case T_HEADER:              /* return a NEW tree header record */
+        size = (int) va_arg(ap, int);
+        if ((p = (void *) malloc(size)) == OUT_OF_MEM)
+            error = TRUE;
 #ifdef DEBUG_MALLAC_USAGE
-	printf(">>> ALLOCATING MEMORY FOR T_HEADER AT 0x%-5x; %i BYTES <<<\n", p, size);
+        printf(">>> ALLOCATING MEMORY FOR T_HEADER AT 0x%-5x; %i BYTES <<<\n", p, size);
 #endif
 #ifdef DEBUG_SHOWGRAPHS
-	gheader(p);
+        gheader(p);
 #endif
 
-	break;
-    case T_NODE:		/* return a NEW or USED node */
-	ph = (t_header *) va_arg(ap, t_header *);	/* next arg */
+        break;
+    case T_NODE:                /* return a NEW or USED node */
+        ph = (t_header *) va_arg(ap, t_header *);       /* next arg */
 
-	/* first check and see if there are any used nodes in the free list;  if there is, */
-	/* get one from the list; else  malloc a new one. In either case zero out the node */
-	/* before returning it:                                                            */
+        /* first check and see if there are any used nodes in the free list;  if there is, */
+        /* get one from the list; else  malloc a new one. In either case zero out the node */
+        /* before returning it:                                                            */
 
-	if (ph->th_flist == NULL) {
-	    size = sizeof(t_node) + ph->th_usiz;
-	    if ((p = (t_node *) malloc(size)) == OUT_OF_MEM)
-		error = TRUE;
+        if (ph->th_flist == NULL) {
+            size = sizeof(t_node) + ph->th_usiz;
+            if ((p = (t_node *) malloc(size)) == OUT_OF_MEM)
+                error = TRUE;
 #ifdef DEBUG_MALLAC_USAGE
-	    printf(">>> ALLOCATING MEMORY FOR T_NODE AT 0x%-5x; %i BYTES <<<\n", p, size);
+            printf(">>> ALLOCATING MEMORY FOR T_NODE AT 0x%-5x; %i BYTES <<<\n", p, size);
 #endif
 #ifdef DEBUG_SHOWGRAPHS
-	    gnode(ph, p);
+            gnode(ph, p);
 #endif
-	} else {
-	    p = (t_node *) ph->th_flist;
-	    ph->th_flist = ((t_node *) p)->tn_ulink;
-	    ph->th_flcnt--;
+        } else {
+            p = (t_node *) ph->th_flist;
+            ph->th_flist = ((t_node *) p)->tn_ulink;
+            ph->th_flcnt--;
 #ifdef DEBUG_MALLAC_USAGE
-	    printf(">>> RE-USING MEMORY FOR T_NODE AT 0x%-5x; %i BYTES <<<\n", p, ph->th_usiz);
+            printf(">>> RE-USING MEMORY FOR T_NODE AT 0x%-5x; %i BYTES <<<\n", p, ph->th_usiz);
 #endif
 #ifdef DEBUG_SHOWGRAPHS
-	    gnode(ph, p);
+            gnode(ph, p);
 #endif
-	}
-	if (!error) {
-	    memset(((t_node *) p) + 1, 0, ph->th_usiz);
-	    p = (void *) p;
+        }
+        if (!error) {
+            memset(((t_node *) p) + 1, 0, ph->th_usiz);
+            p = (void *) p;
 #ifdef DEBUG_MALLAC_USAGE
-	    printf(">>> memset AT LOCATION 0x%-5x to 0; %i BYTES <<<\n", ((t_node *) p) + 1, ph->th_usiz);
+            printf(">>> memset AT LOCATION 0x%-5x to 0; %i BYTES <<<\n", ((t_node *) p) + 1, ph->th_usiz);
 #endif
-	}
-	break;
+        }
+        break;
     }
 
-    va_end(ap);			/* this call is required before leaving the function */
+    va_end(ap);                 /* this call is required before leaving the function */
     if (error) {
-	bst_errno = BST_ERR_MALLOC;
-	fprintf(stderr, "malloc error: cannot allocate memory %i\n", size);
+        bst_errno = BST_ERR_MALLOC;
+        fprintf(stderr, "malloc error: cannot allocate memory %i\n", size);
     }
 
     return (p);
@@ -181,55 +181,55 @@ void tfreem(MallocTypes mkind, ...)
   *  None.
   *******************************************************************************/
 
-    va_list ap;			/* points to each argument in turn */
-    t_header *ph;		/* pointer to tree header record */
-    t_node *pn;			/* pointer to tree node */
-    FreeOpts op;		/* operation to perform on node: FREE it or CHAIN it */
+    va_list ap;                 /* points to each argument in turn */
+    t_header *ph;               /* pointer to tree header record */
+    t_node *pn;                 /* pointer to tree node */
+    FreeOpts op;                /* operation to perform on node: FREE it or CHAIN it */
 
-    va_start(ap, mkind);	/* initialize arg pointer */
+    va_start(ap, mkind);        /* initialize arg pointer */
 
     switch (mkind) {
-    case T_HEADER:		/* free a tree header record */
-	ph = (t_header *) va_arg(ap, t_header *);
-	free(ph);
+    case T_HEADER:              /* free a tree header record */
+        ph = (t_header *) va_arg(ap, t_header *);
+        free(ph);
 #ifdef DEBUG_MALLAC_USAGE
-	printf(">>> FREEING MEMORY FOR T_HEADER AT 0x%-5x <<<\n", ph);
+        printf(">>> FREEING MEMORY FOR T_HEADER AT 0x%-5x <<<\n", ph);
 #endif
-	break;
-    case T_NODE:		/* free or chain a tree node */
-	op = va_arg(ap, FreeOpts);
-	switch (op) {
-	case CHAIN:		/* chain it into the list of free nodes in the tree header */
-	    ph = (t_header *) va_arg(ap, t_header *);
-	    pn = (t_node *) va_arg(ap, t_node *);
+        break;
+    case T_NODE:                /* free or chain a tree node */
+        op = va_arg(ap, FreeOpts);
+        switch (op) {
+        case CHAIN:             /* chain it into the list of free nodes in the tree header */
+            ph = (t_header *) va_arg(ap, t_header *);
+            pn = (t_node *) va_arg(ap, t_node *);
 
-	    /* There is a limit to the number of nodes that can be in a tree header's free   */
-	    /* list defined by MAX_FLIST. If the free list is max'd out, then free the node; */
-	    /* else chain it into the the free list maintained in the header record:         */
+            /* There is a limit to the number of nodes that can be in a tree header's free   */
+            /* list defined by MAX_FLIST. If the free list is max'd out, then free the node; */
+            /* else chain it into the the free list maintained in the header record:         */
 
-	    if (ph->th_flcnt < MAX_FLIST - 1) {
-		pn->tn_ulink = ph->th_flist;
-		ph->th_flist = pn;
-		ph->th_flcnt++;
+            if (ph->th_flcnt < MAX_FLIST - 1) {
+                pn->tn_ulink = ph->th_flist;
+                ph->th_flist = pn;
+                ph->th_flcnt++;
 #ifdef DEBUG_MALLAC_USAGE
-		printf(">>> CHAINING T_NODE AT LOCATION 0x%-5x TO HEADER <<<\n", pn);
+                printf(">>> CHAINING T_NODE AT LOCATION 0x%-5x TO HEADER <<<\n", pn);
 #endif
-	    } else {
+            } else {
 #ifdef DEBUG_MALLAC_USAGE
-		printf(">>> (case T_NODE/CHAIN (th_flist too many) FREEING T_NODE AT LOCATION 0x%-5x <<<\n", pn);
+                printf(">>> (case T_NODE/CHAIN (th_flist too many) FREEING T_NODE AT LOCATION 0x%-5x <<<\n", pn);
 #endif
-		free(pn);
-	    }
-	    break;
-	case FREE:		/* free it up */
-	    pn = (t_node *) va_arg(ap, t_node *);
+                free(pn);
+            }
+            break;
+        case FREE:              /* free it up */
+            pn = (t_node *) va_arg(ap, t_node *);
 #ifdef DEBUG_MALLAC_USAGE
-	    printf(">>> (case T_NODE/FREE) FREEING T_NODE AT LOCATION 0x%-5x <<<\n", pn);
+            printf(">>> (case T_NODE/FREE) FREEING T_NODE AT LOCATION 0x%-5x <<<\n", pn);
 #endif
-	    free(pn);
-	    break;
-	}
-	break;
+            free(pn);
+            break;
+        }
+        break;
     }
-    va_end(ap);			/* required call before exiting */
+    va_end(ap);                 /* required call before exiting */
 }

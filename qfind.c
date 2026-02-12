@@ -59,13 +59,13 @@ Boolean qfind(t_header *ph, t_node *tnode)
 
     /* search ... */
     while (pn != NULL) {
-	cmpresult = ph->th_ucf(tnode + 1, pn + 1);
-	if (cmpresult < 0)
-	    pn = pn->tn_llink;
-	else if (cmpresult > 0)
-	    pn = pn->tn_rlink;
-	else
-	    return (TRUE);
+        cmpresult = ph->th_ucf(tnode + 1, pn + 1);
+        if (cmpresult < 0)
+            pn = pn->tn_llink;
+        else if (cmpresult > 0)
+            pn = pn->tn_rlink;
+        else
+            return (TRUE);
     }
 
     /* no luck ... */

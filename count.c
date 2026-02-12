@@ -57,8 +57,8 @@ int bst_count(char *tname)
     bst_errno = BST_ERR_RESET;
 
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (UNDEFINED_COUNT);
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (UNDEFINED_COUNT);
     } else
-	return (ph->th_ncnt);
+        return (ph->th_ncnt);
 }

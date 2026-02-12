@@ -57,12 +57,12 @@ Boolean bst_empty(char *tname)
     bst_errno = BST_ERR_RESET;
 
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (TRUE);
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (TRUE);
     }
 
     if (ph->th_root == EMPTY_TREE)
-	return (TRUE);
+        return (TRUE);
     else
-	return (FALSE);
+        return (FALSE);
 }

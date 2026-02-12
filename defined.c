@@ -54,8 +54,8 @@ Boolean bst_defined(char *tname)
     bst_errno = BST_ERR_RESET;
 
     if (find_header(tname) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (FALSE);
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (FALSE);
     } else
-	return (TRUE);
+        return (TRUE);
 }

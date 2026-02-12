@@ -75,15 +75,15 @@ void find_header_list(char ***stringArr, int *arrSize)
     storage[size] = (char *) malloc(sizeof(char));
 
     for (ph = t_head; ph != NULL; ph = ph->th_link) {
-	memset(p_buff, '\0', MAX_TREE_NAME_LEN + 1);
-	strncpy(p_buff, ph->th_name, MAX_TREE_NAME_LEN);
+        memset(p_buff, '\0', MAX_TREE_NAME_LEN + 1);
+        strncpy(p_buff, ph->th_name, MAX_TREE_NAME_LEN);
 
-	storage[size] = (char *) realloc(storage[size], (strlen(p_buff) + 1) * sizeof(char));
-	strcpy(storage[size], p_buff);
+        storage[size] = (char *) realloc(storage[size], (strlen(p_buff) + 1) * sizeof(char));
+        strcpy(storage[size], p_buff);
 
-	size++;
-	storage = (char **) realloc(storage, (size + 1) * sizeof(char *));
-	storage[size] = NULL;	/* critical, older gcc & Sun Studio did not need this else realloc(): invalid pointer (core dumped)  */
+        size++;
+        storage = (char **) realloc(storage, (size + 1) * sizeof(char *));
+        storage[size] = NULL;   /* critical, older gcc & Sun Studio did not need this else realloc(): invalid pointer (core dumped)  */
     }
 
     /*

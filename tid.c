@@ -56,8 +56,8 @@ double tid(void)
   *  None.
   *******************************************************************************/
 
-    time_t t;			/* time in seconds */
-    double msec;		/* microseconds */
+    time_t t;                   /* time in seconds */
+    double msec;                /* microseconds */
 
 
     /*return ((double) rand()); *//* use random number */
@@ -67,19 +67,19 @@ double tid(void)
 #endif
 
 #ifdef SVR3
-    static time_t rseed = 0;	/* random number seed */
-    t = time(&t);		/* get time in seconds */
-    srand(rseed++);		/* use a new seed */
-    msec = (double) rand();	/* use random number for the decimal part */
+    static time_t rseed = 0;    /* random number seed */
+    t = time(&t);               /* get time in seconds */
+    srand(rseed++);             /* use a new seed */
+    msec = (double) rand();     /* use random number for the decimal part */
 #endif
 #ifdef SVR4
-    struct timeval tp;		/* pointer to time structure */
-    struct timezone tz;		/* pointer to time zone structure */
-    gettimeofday(&tp, &tz);	/* get time structures */
-    t = tp.tv_sec;		/* t is time in seconds */
-    msec = (double) tp.tv_usec;	/* use microseconds for the decimal part */
+    struct timeval tp;          /* pointer to time structure */
+    struct timezone tz;         /* pointer to time zone structure */
+    gettimeofday(&tp, &tz);     /* get time structures */
+    t = tp.tv_sec;              /* t is time in seconds */
+    msec = (double) tp.tv_usec; /* use microseconds for the decimal part */
 #endif
 
-    while ((msec /= 10) > 1.0);	/* convert to a decimal number */
+    while ((msec /= 10) > 1.0); /* convert to a decimal number */
     return ((double) t + msec);
 }

@@ -79,10 +79,10 @@ Boolean twalk(TWalkOps op, Traversals order, ...)
   *******************************************************************************/
 
     struct {
-	unsigned int done:1;
-	unsigned int try_going_left:1;
-	unsigned int time_to_go_right:1;
-	unsigned int end_of_left_branch:1;
+        unsigned int done:1;
+        unsigned int try_going_left:1;
+        unsigned int time_to_go_right:1;
+        unsigned int end_of_left_branch:1;
     } bitflags;
 
     va_list ap;
@@ -131,168 +131,168 @@ Boolean twalk(TWalkOps op, Traversals order, ...)
 
     /* arguments processing and initialization: */
     /* NOTE: had to fix the next line for FreeBSD */
-    va_start(ap, order);	/* ap points to 3rd arg now */
+    va_start(ap, order);        /* ap points to 3rd arg now */
 
     switch (op) {
     case VISIT:
     case DELETE:
-	/* root tree node */
-	p = (t_node *) va_arg(ap, t_node *);
+        /* root tree node */
+        p = (t_node *) va_arg(ap, t_node *);
 
-	if (op == VISIT) {
-	    /* printf("op = VISIT\n\n"); */
-	    /* next arg is the user definded function to do something with this leaf node */
-	    p_uvf = va_arg(ap, PFUNC);
+        if (op == VISIT) {
+            /* printf("op = VISIT\n\n"); */
+            /* next arg is the user definded function to do something with this leaf node */
+            p_uvf = va_arg(ap, PFUNC);
 
-	    /* if there is no function to perform on the leaf, what's the point then? */
-	    if (p_uvf == NULL) {
-		bst_errno = BST_ERR_NO_UPF_GIVEN;
-		va_end(ap);
-		return (FALSE);
-	    }
-	}
-	break;
+            /* if there is no function to perform on the leaf, what's the point then? */
+            if (p_uvf == NULL) {
+                bst_errno = BST_ERR_NO_UPF_GIVEN;
+                va_end(ap);
+                return (FALSE);
+            }
+        }
+        break;
     case COPY:
-	/* printf("op = COPY\n\n"); */
-	ph = (t_header *) va_arg(ap, t_header *);
-	ntname = (char *) va_arg(ap, char *);
-	p = ph->th_root;
-	pp_dup = NULL;
-	if ((ph_dup = (t_header *) cp_header(ph, ntname)) == NULL) {
-	    va_end(ap);
-	    return (FALSE);
-	}
-	/* printf(">>> tree header duplicated <<<\n"); */
-	break;
+        /* printf("op = COPY\n\n"); */
+        ph = (t_header *) va_arg(ap, t_header *);
+        ntname = (char *) va_arg(ap, char *);
+        p = ph->th_root;
+        pp_dup = NULL;
+        if ((ph_dup = (t_header *) cp_header(ph, ntname)) == NULL) {
+            va_end(ap);
+            return (FALSE);
+        }
+        /* printf(">>> tree header duplicated <<<\n"); */
+        break;
     case IDENT:
     case EQUAL:
-	if (op == IDENT) {
-	    /* printf("op = IDENT\n\n"); */
-	} else {
-	    /* printf("op = EQUAL\n\n"); */
-	}
-	ph = (t_header *) va_arg(ap, t_header *);
-	p = ph->th_root;
-	ph_dup = (t_header *) va_arg(ap, t_header *);
-	p_dup = ph_dup->th_root;
-	if (p == NULL && p_dup != NULL || p != NULL && p_dup == NULL) {
-	    va_end(ap);
-	    return (FALSE);
-	}
-	if (p == NULL && p_dup == NULL) {
-	    va_end(ap);
-	    /* printf("twalk: EXIT @ p or p_dup NULL\n"); */
-	    return (TRUE);
-	}
-	/* printf("each root is non-null\n"); */
-	break;
+        if (op == IDENT) {
+            /* printf("op = IDENT\n\n"); */
+        } else {
+            /* printf("op = EQUAL\n\n"); */
+        }
+        ph = (t_header *) va_arg(ap, t_header *);
+        p = ph->th_root;
+        ph_dup = (t_header *) va_arg(ap, t_header *);
+        p_dup = ph_dup->th_root;
+        if (p == NULL && p_dup != NULL || p != NULL && p_dup == NULL) {
+            va_end(ap);
+            return (FALSE);
+        }
+        if (p == NULL && p_dup == NULL) {
+            va_end(ap);
+            /* printf("twalk: EXIT @ p or p_dup NULL\n"); */
+            return (TRUE);
+        }
+        /* printf("each root is non-null\n"); */
+        break;
     }
     va_end(ap);
 
     if (p == NULL) {
-	/* printf("Empty tree; depth = %i\n", depth); */
-	/* printf("twalk: EXIT @ p == ROOT == NULL\n"); */
-	return (TRUE);
+        /* printf("Empty tree; depth = %i\n", depth); */
+        /* printf("twalk: EXIT @ p == ROOT == NULL\n"); */
+        return (TRUE);
     }
 
     /* traverse the tree in specified order */
     while (!bitflags.done) {
-	bitflags.end_of_left_branch = BIT_FALSE;
-	while (!bitflags.end_of_left_branch) {
-	    if (traversal.preorder) {
-		switch (action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt)) {
-		case NOT_EQUAL:
-		    /* printf("twalk: EXIT @ loop: not equal\n"); */
-		    return (FALSE);
-		    break;
-		case NOT_IDENT:
-		    /* printf("twalk: EXIT @ loop: not identical\n"); */
-		    return (FALSE);
-		    break;
-		case ERROR:
-		    tdispose(ph_dup);
-		    /* printf("twalk: EXIT @ loop: ERROR\n"); */
-		    return (FALSE);
-		    break;
-		case OK:
-		    break;
-		}
-	    }
-	    if (p->tn_llink != NULL) {
-		p = p->tn_llink;
-		if (op == IDENT)
-		    if (p_dup->tn_llink != NULL)
-			p_dup = p_dup->tn_llink;
-		    else {
-			/* printf("twalk: EXIT @ IDENT: LEFT !NULL & LEFT NULL\n"); */
-			return (FALSE);
-		    }
-		depth++;
-	    } else {
-		bitflags.end_of_left_branch = BIT_TRUE;
-		if (op == IDENT && p_dup->tn_llink != NULL) {
-		    /* printf("twalk: EXIT @ IDENT: LEFT NULL & RIGHT !NULL\n"); */
-		    return (FALSE);
-		}
-	    }
-	}
-	bitflags.try_going_left = BIT_FALSE;
-	while (!bitflags.try_going_left && !bitflags.done) {
-	    if (traversal.inorder)
-		action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt);
-	    if (op == IDENT)
-		if (p->tn_rlink == NULL && p_dup->tn_rlink != NULL || p->tn_rlink != NULL && p_dup->tn_rlink == NULL) {
-		    /* printf("twalk: EXIT @ IDENT: 4-way *if* test\n"); */
-		    return (FALSE);
-		}
-	    if (p->tn_rlink != NULL) {
-		p = p->tn_rlink;
-		if (op == IDENT)
-		    p_dup = p_dup->tn_rlink;
-		depth++;
-		bitflags.try_going_left = BIT_TRUE;
-	    }
-	    if (!bitflags.try_going_left) {
-		bitflags.time_to_go_right = BIT_FALSE;
-		while (!bitflags.done && !bitflags.time_to_go_right) {
-		    if (traversal.postorder)
-			action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt);
-		    if (!bitflags.done) {
-			depth--;
-			if (p->tn_tag == LEFT_SON) {
-			    bitflags.time_to_go_right = BIT_TRUE;
-			    bitflags.try_going_left = BIT_FALSE;
-			} else if (p->tn_ulink == NULL)
-			    bitflags.done = BIT_TRUE;
+        bitflags.end_of_left_branch = BIT_FALSE;
+        while (!bitflags.end_of_left_branch) {
+            if (traversal.preorder) {
+                switch (action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt)) {
+                case NOT_EQUAL:
+                    /* printf("twalk: EXIT @ loop: not equal\n"); */
+                    return (FALSE);
+                    break;
+                case NOT_IDENT:
+                    /* printf("twalk: EXIT @ loop: not identical\n"); */
+                    return (FALSE);
+                    break;
+                case ERROR:
+                    tdispose(ph_dup);
+                    /* printf("twalk: EXIT @ loop: ERROR\n"); */
+                    return (FALSE);
+                    break;
+                case OK:
+                    break;
+                }
+            }
+            if (p->tn_llink != NULL) {
+                p = p->tn_llink;
+                if (op == IDENT)
+                    if (p_dup->tn_llink != NULL)
+                        p_dup = p_dup->tn_llink;
+                    else {
+                        /* printf("twalk: EXIT @ IDENT: LEFT !NULL & LEFT NULL\n"); */
+                        return (FALSE);
+                    }
+                depth++;
+            } else {
+                bitflags.end_of_left_branch = BIT_TRUE;
+                if (op == IDENT && p_dup->tn_llink != NULL) {
+                    /* printf("twalk: EXIT @ IDENT: LEFT NULL & RIGHT !NULL\n"); */
+                    return (FALSE);
+                }
+            }
+        }
+        bitflags.try_going_left = BIT_FALSE;
+        while (!bitflags.try_going_left && !bitflags.done) {
+            if (traversal.inorder)
+                action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt);
+            if (op == IDENT)
+                if (p->tn_rlink == NULL && p_dup->tn_rlink != NULL || p->tn_rlink != NULL && p_dup->tn_rlink == NULL) {
+                    /* printf("twalk: EXIT @ IDENT: 4-way *if* test\n"); */
+                    return (FALSE);
+                }
+            if (p->tn_rlink != NULL) {
+                p = p->tn_rlink;
+                if (op == IDENT)
+                    p_dup = p_dup->tn_rlink;
+                depth++;
+                bitflags.try_going_left = BIT_TRUE;
+            }
+            if (!bitflags.try_going_left) {
+                bitflags.time_to_go_right = BIT_FALSE;
+                while (!bitflags.done && !bitflags.time_to_go_right) {
+                    if (traversal.postorder)
+                        action(op, *p_uvf, depth, p, ph_dup, p_dup, &pp_dup, &dp, &cnt);
+                    if (!bitflags.done) {
+                        depth--;
+                        if (p->tn_tag == LEFT_SON) {
+                            bitflags.time_to_go_right = BIT_TRUE;
+                            bitflags.try_going_left = BIT_FALSE;
+                        } else if (p->tn_ulink == NULL)
+                            bitflags.done = BIT_TRUE;
 /* need to clean this up. if done, then break, and clean up at end */
-			p = p->tn_ulink;
-			if (op == IDENT)
-			    if (p_dup->tn_ulink != NULL)
-				p_dup = p_dup->tn_ulink;
-			    else if (!bitflags.done)
-				return (FALSE);
-			if (op == COPY && pp_dup != NULL)
-			    pp_dup = pp_dup->tn_ulink;
+                        p = p->tn_ulink;
+                        if (op == IDENT)
+                            if (p_dup->tn_ulink != NULL)
+                                p_dup = p_dup->tn_ulink;
+                            else if (!bitflags.done)
+                                return (FALSE);
+                        if (op == COPY && pp_dup != NULL)
+                            pp_dup = pp_dup->tn_ulink;
 
-			if (op == DELETE && dp != NULL) {
-			    tfreem(T_NODE, FREE, dp);
-			    dp = NULL;
-			}
-		    }
-		}
-	    }
-	}
+                        if (op == DELETE && dp != NULL) {
+                            tfreem(T_NODE, FREE, dp);
+                            dp = NULL;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     if ((op == COPY) && (cnt != ph->th_ncnt)) {
-	bst_errno = BST_ERR_COPY_CNT;
-	tdispose(ph_dup);
-	/* printf("twalk EXIT: (COPY) @ end\n"); */
-	return (FALSE);
+        bst_errno = BST_ERR_COPY_CNT;
+        tdispose(ph_dup);
+        /* printf("twalk EXIT: (COPY) @ end\n"); */
+        return (FALSE);
     }
     if (op == IDENT || op == EQUAL) {
-	/* printf("twalk EXIT: (IDENT/EQUAL) @ end\n"); */
-	return (TRUE);
+        /* printf("twalk EXIT: (IDENT/EQUAL) @ end\n"); */
+        return (TRUE);
     }
     /* printf("twalk EXIT: @ end of function\n"); */
 }
@@ -319,23 +319,23 @@ void setflags(Traversals order, struct traversals *traversal)
 
     switch (order) {
     case INORDER:
-	(*traversal).inorder = 1;
-	(*traversal).preorder = 0;
-	(*traversal).postorder = 0;
-	/* printf(">>> INORDER <<<\n\n"); */
-	break;
+        (*traversal).inorder = 1;
+        (*traversal).preorder = 0;
+        (*traversal).postorder = 0;
+        /* printf(">>> INORDER <<<\n\n"); */
+        break;
     case PREORDER:
-	(*traversal).inorder = 0;
-	(*traversal).preorder = 1;
-	(*traversal).postorder = 0;
-	/* printf(">>> PREOREDER <<<\n\n"); */
-	break;
+        (*traversal).inorder = 0;
+        (*traversal).preorder = 1;
+        (*traversal).postorder = 0;
+        /* printf(">>> PREOREDER <<<\n\n"); */
+        break;
     case POSTORDER:
-	(*traversal).inorder = 0;
-	(*traversal).preorder = 0;
-	(*traversal).postorder = 1;
-	/* printf(">>> POSTORDER <<<\n\n"); */
-	break;
+        (*traversal).inorder = 0;
+        (*traversal).preorder = 0;
+        (*traversal).postorder = 1;
+        /* printf(">>> POSTORDER <<<\n\n"); */
+        break;
     }
 }
 
@@ -365,7 +365,7 @@ t_header *cp_header(t_header *ph, char *ntn)
     extern char *strcpy(char *, const char *);
 
     if ((ph_dup = (t_header *) tallocm(T_HEADER, sizeof(t_header))) == NULL)
-	return (NULL);
+        return (NULL);
 
     strcpy(ph_dup->th_name, ntn);
 
@@ -428,77 +428,77 @@ operation_status action(TWalkOps op, void (*compf)(), int depth, t_node *p, t_he
 
     switch (op) {
     case VISIT:
-	/* Data Integrity: how or what to do here?
-	 * For this tree node [node header|user data], we are going to call the users specified function with
-	 * a reference to this tree node [|user data]. But, how will this node be used to safe guard integrity?
-	 * If the user updates their data, copy out/in, or not is a problem. If a copy out/in, we have to copy 
-	 *    back their potentially changed copy into the tree and if theirs is corrupted, ours is then corrupted.
-	 * If direct access, then instead of a copy out/in, it would be corrupted directly with the same outcome.
-	 *
-	 * We cannot make a copy of the current node because we do not have access to the tree header that contains
-	 * the freelist and the size of the users data structure.
-	 *
-	 * So, we let them have direct access to the tree node users data area
-	 */
+        /* Data Integrity: how or what to do here?
+         * For this tree node [node header|user data], we are going to call the users specified function with
+         * a reference to this tree node [|user data]. But, how will this node be used to safe guard integrity?
+         * If the user updates their data, copy out/in, or not is a problem. If a copy out/in, we have to copy 
+         *    back their potentially changed copy into the tree and if theirs is corrupted, ours is then corrupted.
+         * If direct access, then instead of a copy out/in, it would be corrupted directly with the same outcome.
+         *
+         * We cannot make a copy of the current node because we do not have access to the tree header that contains
+         * the freelist and the size of the users data structure.
+         *
+         * So, we let them have direct access to the tree node users data area
+         */
 
-	/* check if function pointer exists supplied by user */
-	if (compf == NULL) {
-	    bst_errno = BST_ERR_NO_UCF_GIVEN;
-	    return (ERROR);
-	}
+        /* check if function pointer exists supplied by user */
+        if (compf == NULL) {
+            bst_errno = BST_ERR_NO_UCF_GIVEN;
+            return (ERROR);
+        }
 
-	/* call the users supplied function with this node as an argument, pointing to their data area */
-	/* technically it is "Leaf" but the library does not have access to it: compf( (Leaf *) (p + 1), depth); */
-	compf((void *) (p + 1), depth);
-	return (OK);
-	break;
+        /* call the users supplied function with this node as an argument, pointing to their data area */
+        /* technically it is "Leaf" but the library does not have access to it: compf( (Leaf *) (p + 1), depth); */
+        compf((void *) (p + 1), depth);
+        return (OK);
+        break;
     case DELETE:
-	*dp = p;
-	return (OK);
-	break;
+        *dp = p;
+        return (OK);
+        break;
     case COPY:
-	(*count)++;
-	if ((p_dup = (t_node *) tallocm(T_NODE, ph_dup)) == NULL)
-	    return (ERROR);
-	memcpy(p_dup, p, sizeof(t_node) + ph_dup->th_usiz);
+        (*count)++;
+        if ((p_dup = (t_node *) tallocm(T_NODE, ph_dup)) == NULL)
+            return (ERROR);
+        memcpy(p_dup, p, sizeof(t_node) + ph_dup->th_usiz);
 #ifdef DEBUG_MALLAC_USAGE
-	printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, p_dup, sizeof(t_header) + ph_dup->th_usiz);
+        printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, p_dup, sizeof(t_header) + ph_dup->th_usiz);
 #endif
-	p_dup->tn_id = ph_dup->th_id;
-	if (*pp_dup != NULL)
-	    switch (p_dup->tn_tag) {
-	    case LEFT_SON:
-		(*pp_dup)->tn_llink = p_dup;
-		break;
-	    case RIGHT_SON:
-		(*pp_dup)->tn_rlink = p_dup;
-		break;
-	    }
-	p_dup->tn_ulink = *pp_dup;
-	p_dup->tn_llink = NULL;
-	p_dup->tn_rlink = NULL;
-	*pp_dup = p_dup;
-	if (*count == 1) {
-	    ph_dup->th_root = p_dup;
-	    /* printf("     >>> this s the root node <<<\n"); */
-	} else
-	    /* printf("\n"); */
-	    return (OK);
-	break;
+        p_dup->tn_id = ph_dup->th_id;
+        if (*pp_dup != NULL)
+            switch (p_dup->tn_tag) {
+            case LEFT_SON:
+                (*pp_dup)->tn_llink = p_dup;
+                break;
+            case RIGHT_SON:
+                (*pp_dup)->tn_rlink = p_dup;
+                break;
+            }
+        p_dup->tn_ulink = *pp_dup;
+        p_dup->tn_llink = NULL;
+        p_dup->tn_rlink = NULL;
+        *pp_dup = p_dup;
+        if (*count == 1) {
+            ph_dup->th_root = p_dup;
+            /* printf("     >>> this s the root node <<<\n"); */
+        } else
+            /* printf("\n"); */
+            return (OK);
+        break;
     case IDENT:
-	if (ph_dup->th_ucf(p + 1, p_dup + 1) == 0)
-	    return (OK);
-	else
-	    return (NOT_IDENT);
-	break;
+        if (ph_dup->th_ucf(p + 1, p_dup + 1) == 0)
+            return (OK);
+        else
+            return (NOT_IDENT);
+        break;
     case EQUAL:
-	if (qfind(ph_dup, p)) {
-	    /* printf("FOUND\n"); */
-	    return (OK);
-	} else {
-	    /* printf("NOT FOUND\n"); */
-	    return (NOT_EQUAL);
-	}
-	break;
+        if (qfind(ph_dup, p)) {
+            /* printf("FOUND\n"); */
+            return (OK);
+        } else {
+            /* printf("NOT FOUND\n"); */
+            return (NOT_EQUAL);
+        }
+        break;
     }
 }

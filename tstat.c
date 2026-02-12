@@ -26,8 +26,8 @@
 #define DEB_FULL   1
 #define DBG_VERIFY 1
 
-static int ncount;		/* local global to this module only */
-static int maxdepth;		/* local global to this module only */
+static int ncount;              /* local global to this module only */
+static int maxdepth;            /* local global to this module only */
 
 static char *RCSid[] = { "$Id$" };
 
@@ -73,13 +73,13 @@ void bst_stat(char *tname)
     bst_errno = BST_ERR_RESET;
 
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return;
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return;
     }
 
     if (ph->th_bsttype == BST) {
-	printf("checking status of tree: nothing to check, tree is type BST, not AVL: OK\n");
-	return;
+        printf("checking status of tree: nothing to check, tree is type BST, not AVL: OK\n");
+        return;
 
     }
     printf("********** VERIFYING **********");
@@ -88,13 +88,13 @@ void bst_stat(char *tname)
     checkbalance(ph->th_root);
 
     if (bst_errno == 0)
-	printf("...........................................OK\n");
+        printf("...........................................OK\n");
     else
-	printf("\n\n\007\007...................................*** ERROR %3i! ***\n\n", bst_errno);
+        printf("\n\n\007\007...................................*** ERROR %3i! ***\n\n", bst_errno);
 
     if (ph->th_ncnt != ncount)
-	printf("\007.................. node miscount: ph->th_ncnt %i  run time count %i\n", ph->th_ncnt, ncount);
-}				/* bst_stat */
+        printf("\007.................. node miscount: ph->th_ncnt %i  run time count %i\n", ph->th_ncnt, ncount);
+}                               /* bst_stat */
 
 
 /* checkbalance: does the actual work */
@@ -141,41 +141,41 @@ void checkbalance(t_node *p)
     int bf;
 
     if ((p == NULL) || (bst_errno == BST_ERR_OUT_OF_BALANCE))
-	return;
+        return;
 
     ncount++;
     if (p->tn_llink != NULL) {
-	if (p->tn_llink->tn_tag != LEFT_SON) {
-	    printf("p->left->tn_tag is incorrect! node (0x%-5x)\n", p->tn_llink);
-	    bst_errno = BST_ERR_TAG;
-	}
-	if (p->tn_llink->tn_ulink != p) {
-	    printf("p->left->tn_ulink is astray! node (0x%-5x)\n", p->tn_llink);
-	    bst_errno = BST_ERR_TAG;
-	}
+        if (p->tn_llink->tn_tag != LEFT_SON) {
+            printf("p->left->tn_tag is incorrect! node (0x%-5x)\n", p->tn_llink);
+            bst_errno = BST_ERR_TAG;
+        }
+        if (p->tn_llink->tn_ulink != p) {
+            printf("p->left->tn_ulink is astray! node (0x%-5x)\n", p->tn_llink);
+            bst_errno = BST_ERR_TAG;
+        }
     }
     checkbalance(p->tn_llink);
 
     bf = depth(p->tn_llink) - depth(p->tn_rlink);
 
     if (p->tn_bf != bf) {
-	printf("tree is out of balance! node (0x%-5x)\n", p);
-	bst_errno = BST_ERR_OUT_OF_BALANCE;
-	return;
+        printf("tree is out of balance! node (0x%-5x)\n", p);
+        bst_errno = BST_ERR_OUT_OF_BALANCE;
+        return;
     }
     if (p->tn_rlink != NULL) {
-	if (p->tn_rlink->tn_tag != RIGHT_SON) {
-	    printf("p->right->tn_tag is incorrect! node (0x%-5x)\n", p->tn_rlink);
-	    bst_errno = BST_ERR_TAG;
-	}
-	if (p->tn_rlink->tn_ulink != p) {
-	    printf("p->right->tn_ulink is astray! node (0x%-5x)\n", p->tn_rlink);
-	    bst_errno = BST_ERR_TAG;
-	}
+        if (p->tn_rlink->tn_tag != RIGHT_SON) {
+            printf("p->right->tn_tag is incorrect! node (0x%-5x)\n", p->tn_rlink);
+            bst_errno = BST_ERR_TAG;
+        }
+        if (p->tn_rlink->tn_ulink != p) {
+            printf("p->right->tn_ulink is astray! node (0x%-5x)\n", p->tn_rlink);
+            bst_errno = BST_ERR_TAG;
+        }
     }
     checkbalance(p->tn_rlink);
 
-}				/* checkbalance */
+}                               /* checkbalance */
 
 
 /* depth: compute the depth or height current tree where we are currently at. */
@@ -208,12 +208,12 @@ int depth(t_node *p1)
     /* initialize */
 
     d = 0;
-    maxdepth = d;		/* maxdepth is global */
+    maxdepth = d;               /* maxdepth is global */
 
-    searchall(p1, &d);		/* search all possible paths to the leafs */
+    searchall(p1, &d);          /* search all possible paths to the leafs */
 
-    return maxdepth;		/* maxdepth was the longest path encountered */
-}				/* depth */
+    return maxdepth;            /* maxdepth was the longest path encountered */
+}                               /* depth */
 
 /* searchall():  take all possible paths in this tree to the leaves and keep track of the maximum height encountered in this tree */
 void searchall(t_node *p2, int *d1)
@@ -239,16 +239,16 @@ void searchall(t_node *p2, int *d1)
     /* searchall -- take all possible paths in this tree to the leaves and    */
     /* keep track of the maximum height encountered in this tree */
 
-    if (p2 == NULL)		/* end of the trail for this path. */
-	return;
+    if (p2 == NULL)             /* end of the trail for this path. */
+        return;
 
-    (*d1)++;			/* increment depth var one more level that we're at    */
+    (*d1)++;                    /* increment depth var one more level that we're at    */
 
-    if (*d1 > maxdepth)		/* retain the depth level if this is the longest path  */
-	maxdepth = *d1;		/* encountered thus far.                            */
+    if (*d1 > maxdepth)         /* retain the depth level if this is the longest path  */
+        maxdepth = *d1;         /* encountered thus far.                            */
 
-    searchall(p2->tn_llink, d1);	/* take the left branch... */
-    searchall(p2->tn_rlink, d1);	/* now take the right branch... */
+    searchall(p2->tn_llink, d1);        /* take the left branch... */
+    searchall(p2->tn_rlink, d1);        /* now take the right branch... */
 
-    (*d1)--;			/* decrease the level we're on as popping back upwards */
-}				/* searchall */
+    (*d1)--;                    /* decrease the level we're on as popping back upwards */
+}                               /* searchall */

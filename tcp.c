@@ -52,7 +52,7 @@ Boolean bst_copy(char *from, char *to)
   *******************************************************************************/
 
     t_header *ph;
-    t_header *find_header(char *);	/* to retrieve the tree header record */
+    t_header *find_header(char *);      /* to retrieve the tree header record */
 
     Boolean twalk(TWalkOps op, Traversals order, ...);
 
@@ -62,26 +62,26 @@ Boolean bst_copy(char *from, char *to)
 
     /* Verify the length of the 'from' tree name: */
     if (strlen(from) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN_T1;
-	return (FALSE);
+        bst_errno = BST_ERR_NAME_LEN_T1;
+        return (FALSE);
     }
 
     /* Verify that the copy 'from' tree is defined: */
     if ((ph = (t_header *) find_header(from)) == NULL) {
-	bst_errno = BST_ERR_COPY_FROM_NON_EXISTANT;
-	return (FALSE);
+        bst_errno = BST_ERR_COPY_FROM_NON_EXISTANT;
+        return (FALSE);
     }
 
     /* Verify the length of the 'to' tree name: */
     if (strlen(to) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN_T2;
-	return (FALSE);
+        bst_errno = BST_ERR_NAME_LEN_T2;
+        return (FALSE);
     }
 
     /* Verify that the copy 'to' tree does *not* exist: */
     if (find_header(to) != NULL) {
-	bst_errno = BST_ERR_COPY_TO_DEFINED;
-	return (FALSE);
+        bst_errno = BST_ERR_COPY_TO_DEFINED;
+        return (FALSE);
     }
 
     /* Copy the tree: */

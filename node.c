@@ -63,21 +63,21 @@ void *bst_alloc(char *tname)
 
     /* check if tree is defined */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (TREE_NOT_DEFINED);	/* tree not defined */
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (TREE_NOT_DEFINED);      /* tree not defined */
     }
 
     /* check if any nodes for this tree is available from the th_flist */
     /* if not, make up a new one                                       */
     if ((pn = (t_node *) tallocm(T_NODE, ph)) == NULL)
-	return (pn);
+        return (pn);
 
     /* Initialize header node */
     pn->tn_llink = NULL;
     pn->tn_rlink = NULL;
     pn->tn_ulink = NULL;
-    pn->tn_id = ph->th_id;	/* mark the tree owner of this node ! */
+    pn->tn_id = ph->th_id;      /* mark the tree owner of this node ! */
     pn->tn_bf = 0;
 
-    return (void *) (pn + 1);	/* points to the users data area */
+    return (void *) (pn + 1);   /* points to the users data area */
 }

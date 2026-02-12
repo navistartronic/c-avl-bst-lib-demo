@@ -66,29 +66,29 @@ void *bst_get(char *tname, void *kname)
 
     /* check if tree even exists */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (NULL);		/* tree not defined */
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (NULL);          /* tree not defined */
     }
 
     /* cast pointer from users data part to header node part of node */
-    pn = ((t_node *) kname) - 1;	/* cast pointer from leaf type to header type */
+    pn = ((t_node *) kname) - 1;        /* cast pointer from leaf type to header type */
 
     /* check if the node even belongs to this tree */
     if (ph->th_id != pn->tn_id) {
-	bst_errno = BST_ERR_TREE_NODE_MISMATCH;
-	return (NULL);
+        bst_errno = BST_ERR_TREE_NODE_MISMATCH;
+        return (NULL);
     }
 
     /* find the node in the tree returning a pointer to it */
     if ((pn = find_node(ph->th_root, kname, ph->th_ucf, &a, &f, &q)) == NULL) {
-	bst_errno = BST_ERR_KEY_NOT_FOUND;
-	return (NULL);
+        bst_errno = BST_ERR_KEY_NOT_FOUND;
+        return (NULL);
     }
 
     /* make copy of found node to return to user */
     if ((pcopy = (t_node *) tallocm(T_NODE, ph)) == NULL) {
-	bst_errno = BST_ERR_MALLOC;
-	return (NULL);
+        bst_errno = BST_ERR_MALLOC;
+        return (NULL);
     }
     memcpy(pcopy, pn, sizeof(t_node) + ph->th_usiz);
 
@@ -96,5 +96,5 @@ void *bst_get(char *tname, void *kname)
     printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", pn, pcopy, sizeof(t_node) + ph->th_usiz);
 #endif
 
-    return (pcopy + 1);		/* point from header part to users data area */
+    return (pcopy + 1);         /* point from header part to users data area */
 }

@@ -75,13 +75,13 @@ Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (
 
     /* Check if len of tree name is ok */
     if (strlen(tname) < MIN_TREE_NAME_LEN) {
-	bst_errno = BST_ERR_NAME_LEN;
-	return (FALSE);
+        bst_errno = BST_ERR_NAME_LEN;
+        return (FALSE);
     }
     /* Check if tree already defined */
     if ((find_header(tname) != TREE_NOT_DEFINED)) {
-	bst_errno = BST_ERR_TREE_ALREADY_DEFINED;
-	return (FALSE);		/* tree already defined */
+        bst_errno = BST_ERR_TREE_ALREADY_DEFINED;
+        return (FALSE);         /* tree already defined */
     }
 
     /* Check for valid bst class: AVL or bst
@@ -92,27 +92,27 @@ Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (
 
     /* check for valid leaf size being passed */
     if (leafsize <= 0) {
-	bst_errno = BST_ERR_LEAFNODE_SIZE_ZERO;
-	return (FALSE);
+        bst_errno = BST_ERR_LEAFNODE_SIZE_ZERO;
+        return (FALSE);
     }
 
     /* check if a user written compare function is passed */
     if (compf == NULL) {
-	bst_errno = BST_ERR_NO_UCF_GIVEN;
-	return (FALSE);
+        bst_errno = BST_ERR_NO_UCF_GIVEN;
+        return (FALSE);
     }
 
     /* check if user written compare function is same as the user written */
     /* print function (user written print function is optional)           */
     if ((long) compf == (long) prntf) {
-	bst_errno = BST_ERR_UCF_EQUALS_UPF;
-	return (FALSE);
+        bst_errno = BST_ERR_UCF_EQUALS_UPF;
+        return (FALSE);
     }
 
     /* ok,  so create a new tree and check for malloc error */
     if ((p = (t_header *) tallocm(T_HEADER, sizeof(t_header))) == NULL) {
-	bst_errno = BST_ERR_MALLOC;
-	return (FALSE);
+        bst_errno = BST_ERR_MALLOC;
+        return (FALSE);
     }
 
     /* Initialize the new tree node header */
@@ -120,12 +120,12 @@ Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (
     p->th_bsttype = ttype;
     p->th_root = EMPTY_TREE;
     p->th_flist = EMPTY_LIST;
-    p->th_id = tid();		/*  get unique id for this tree */
+    p->th_id = tid();           /*  get unique id for this tree */
     p->th_flcnt = 0;
     p->th_stat = (ttype == AVL && th_stat == TREE_VERIFY_YES) ? TRUE : FALSE;
     p->th_usiz = leafsize;
-    p->th_ucf = (int (*)(void *, void *)) compf;	/* user compare two nodes function(Leaf1,Leaf2) */
-    p->th_upf = (void (*)(void *, int)) prntf;	/* user print function given a node Leaf */
+    p->th_ucf = (int (*)(void *, void *)) compf;        /* user compare two nodes function(Leaf1,Leaf2) */
+    p->th_upf = (void (*)(void *, int)) prntf;  /* user print function given a node Leaf */
     p->th_ncnt = 0;
     p->th_np = fixedrec;
     strcpy(p->th_version_id, VERSION_ID);
@@ -134,7 +134,7 @@ Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (
 
 #ifdef DEBUG_TRACE
     if (p->th_stat == TRUE)
-	printf("********** AVL TREE BALANCE VERIFICATION IS IN EFFECT **********\n");
+        printf("********** AVL TREE BALANCE VERIFICATION IS IN EFFECT **********\n");
 #endif
 
     /* Insert new tree header record into linked list of defined AVL trees: */

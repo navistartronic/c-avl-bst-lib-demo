@@ -35,8 +35,8 @@
 #include "bst.h"
 #endif
 
-t_header *t_head = NULL;	/* global list of defined bst trees */
-int bst_errno = BST_ERR_RESET;	/* global error var of last user op */
+t_header *t_head = NULL;        /* global list of defined bst trees */
+int bst_errno = BST_ERR_RESET;  /* global error var of last user op */
 
 static char *RCSid[] = { "$Id: globals.c,v 1.5 1999/01/18 04:33:02 roger Exp roger $" };
 

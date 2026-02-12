@@ -60,33 +60,33 @@ t_node *find_node(t_node *treeroot, void *keyrecord, int (*th_ucf)(void *, void 
     int cmpresult;
     t_node *p;
 
-    *f = NULL;			/* f is pointer to father of a */
-    p = treeroot;		/* p leads the way thru tree */
-    *q = NULL;			/* q follows p around */
-    *a = treeroot;		/* a is pointer to last node with bf + or - 1 */
+    *f = NULL;                  /* f is pointer to father of a */
+    p = treeroot;               /* p leads the way thru tree */
+    *q = NULL;                  /* q follows p around */
+    *a = treeroot;              /* a is pointer to last node with bf + or - 1 */
 
     /* scan down through the tree searching for the desired key while making */
     /* note of where the last node with a balance factor of +1 or -1 is,     */
     /* just in case the next operation is a key insertion.                   */
 
     while (p != NULL) {
-	if (p->tn_bf != 0) {
-	    *a = p;		/* last node with bf = + or - 1 */
-	    *f = *q;		/* f is the parent node of a */
-	}
-	cmpresult = th_ucf(keyrecord, p + 1);	/* make key comparison call */
+        if (p->tn_bf != 0) {
+            *a = p;             /* last node with bf = + or - 1 */
+            *f = *q;            /* f is the parent node of a */
+        }
+        cmpresult = th_ucf(keyrecord, p + 1);   /* make key comparison call */
 
-	if (cmpresult < 0) {	/* move down through left subtree */
-	    *q = p;
-	    p = p->tn_llink;
-	} else if (cmpresult > 0) {	/* move down through right subtree */
-	    *q = p;
-	    p = p->tn_rlink;
-	} else			/* found it */
-	    return p;		/* p points the header part of the node */
+        if (cmpresult < 0) {    /* move down through left subtree */
+            *q = p;
+            p = p->tn_llink;
+        } else if (cmpresult > 0) {     /* move down through right subtree */
+            *q = p;
+            p = p->tn_rlink;
+        } else                  /* found it */
+            return p;           /* p points the header part of the node */
     }
 
     bst_errno = BST_ERR_KEY_NOT_FOUND;
 
-    return (NULL);		/* key not in tree */
+    return (NULL);              /* key not in tree */
 }

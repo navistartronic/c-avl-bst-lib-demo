@@ -65,8 +65,8 @@ Boolean bst_release(char *tname, void *pl)
 
     /* check if tree is defined */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
-	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (FALSE);	 /* tree not defined */
+        bst_errno = BST_ERR_TREE_NOT_DEFINED;
+        return (FALSE);  /* tree not defined */
     }
 
     /* cast the pointer back to the header part of the node from pointing */
@@ -76,8 +76,8 @@ Boolean bst_release(char *tname, void *pl)
     /* check if passed node belongs to this tree */
 
     if (ph->th_id != pn->tn_id) {
-	bst_errno = BST_ERR_TREE_NODE_MISMATCH;
-	return (FALSE);
+        bst_errno = BST_ERR_TREE_NODE_MISMATCH;
+        return (FALSE);
     }
 
     /* now add it to the free list in the header record:                  */
