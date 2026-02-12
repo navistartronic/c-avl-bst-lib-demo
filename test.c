@@ -67,18 +67,18 @@
  **               FOR DEBUGGING AND TESTING ONLY                        **
  ************************************************************************/
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-#define  MAX_ID_LEN          32	/* defined in bst.h */
-/* included only for debugging or temp TODO on treewalk */
-#include "struct.h"
-typedef struct header t_header;
-typedef struct node t_node;
+  #define  MAX_ID_LEN          32	/* defined in bst.h */
+  /* included only for debugging or temp TODO on treewalk */
+  #include "struct.h"
+  typedef struct header t_header;
+  typedef struct node t_node;
 #endif
 
 /* ARRSIZ: number of nodes to insert into the tree to test */
 /* Should be a runtime argv parameter -n 1000 */
-/* SUN Ultra 60 2GB RAM: after 262144-something  arrkey[ARRSIZ][LEAF_KEYLEN+1] (Sun Studo & GCC) becomes to large for the stack. Need to allocate it on the heap with malloc(). */
+/* SUN Ultra 60 2GB RAM: after 262144-something arrkey[ARRSIZ][LEAF_KEYLEN+1] (Sun Studo & GCC) becomes to large for the stack. Need to allocate it on the heap with malloc(). */
 /* See example using setrlimit(2) to increase the heap size during execution: https://www.linuxquestions.org/questions/programming-9/declare-large-arrays-in-c-947092/ */
-			    /* #define ARRSIZ 250000 *//* init: sizeof(arrkey[250000][31]) is [7750000] */
+/* #define ARRSIZ 250000 *//* init: sizeof(arrkey[250000][31]) is [7750000] */
 /*
  * anything greater than 10 or to your liking disable the ASCII art graph boxes in the Makefile:
  *   DEBUG_LIB_WITH_LIBCALL_TRACING =
@@ -100,7 +100,7 @@ int f(Leaf *, Leaf *);
 
 void reverse(char s[]);
 void itoa(int, char s[]);
-void Print_Node(Leaf * pl, int level);
+void Print_Node(Leaf *pl, int level);
 
 extern int bst_errno;
 extern void bst_stat(char *);
@@ -158,8 +158,7 @@ int main(int argc, char *argv[])
 	} while (bst_put(tn, pnl) == FALSE);
 
 	if (i < MAX_DISPLAY || ARRSIZ - i < MAX_DISPLAY)
-	    printf("new node added %10d of %10d, rand1 [%d] rand2 [%d],  (string) key = [%s]\n", i, ARRSIZ, rand1, rand2,
-		   pnl->key);
+	    printf("new node added %10d of %10d, rand1 [%d] rand2 [%d],  (string) key = [%s]\n", i, ARRSIZ, rand1, rand2, pnl->key);
 	/*printf("new node added %10d of %10d, randnum (int) [%d],  (string) key = [%s]\n", i, ARRSIZ, randnum, pnl->key); */
 
 	/* save the generated key into our array */
@@ -253,7 +252,7 @@ void reverse(char s[])
     }
 }
 
-int f(Leaf * r1, Leaf * r2)
+int f(Leaf *r1, Leaf *r2)
 {
     if (strcmp(r1->key, r2->key) < 0)
 	return -1;
@@ -268,7 +267,7 @@ int f(Leaf * r1, Leaf * r2)
 #define TAB_COL   30
 
 
-void Print_Node2(Leaf * pl, int level)
+void Print_Node2(Leaf *pl, int level)
 {
 
     t_node *pn;
@@ -287,7 +286,7 @@ void Print_Node2(Leaf * pl, int level)
 	    printf("  ");
 	pn = (t_node *) pl;
 	pn--;
-	for (j = 1; j < 4 * level + 3; j++)
+	for (j = 1; j < 4 *level + 3; j++)
 	    putchar(' ');
 	printf("[%s]", pl->key);
 	for (j = 4 * level + 5; j < TAB_COL; j++)
@@ -298,7 +297,7 @@ void Print_Node2(Leaf * pl, int level)
 */
 
 /* Print_Node: user written tree print routing (optional); (this one has debugging info in it */
-void Print_Node(Leaf * pl, int level)
+void Print_Node(Leaf *pl, int level)
 {
     /***************************************************************************************
     ** THIS USER WRITTEN FUNCTION IS OPTIONAL. IF YOU USE IT, YOU CAN FORMAT THE PRINTING **
@@ -344,8 +343,7 @@ void Print_Node(Leaf * pl, int level)
 	/* user space should not know about this detail, how to get to the tree header record */
 	pn = ((t_node *) pl) - 1;
 
-	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf,
-	       pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
+	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
 	printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
 #endif
     }

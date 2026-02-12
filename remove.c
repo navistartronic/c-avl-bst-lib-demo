@@ -190,7 +190,7 @@ Boolean bst_remove(char *tname, void *pl)
 }
 
 /* balancel; perform a left rotation */
-void balancel(t_node ** root, t_node ** p, BalancingSwitch * bsw)
+void balancel(t_node **root, t_node **p, BalancingSwitch *bsw)
 {
     t_node *p1, *p2;
 
@@ -318,7 +318,7 @@ void balancel(t_node ** root, t_node ** p, BalancingSwitch * bsw)
 }				/* balancel */
 
 /* balancer: perform a right rotation */
-void balancer(t_node ** root, t_node ** p, BalancingSwitch * bsw)
+void balancer(t_node **root, t_node **p, BalancingSwitch *bsw)
 {				/* balancer */
     t_node *p1, *p2;
 

@@ -78,8 +78,8 @@ void *tallocm(MallocTypes mkind, ...)
     t_header *ph;		/* pointer to a defined tree header record */
 
 #ifdef DEBUG_SHOWGRAPHS
-    extern void gheader(t_header * ph);
-    extern void gnode(t_header * ph, t_node * pn);
+    extern void gheader(t_header *ph);
+    extern void gnode(t_header *ph, t_node *pn);
 #endif
 
     error = FALSE;		/* initalize */

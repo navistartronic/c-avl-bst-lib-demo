@@ -26,7 +26,7 @@
 static char *RCSid[] = { "$Id: rebalance.c,v 2.2 1999/01/27 01:17:06 roger Exp $" };
 
 
-void rbal(t_node ** treeroot, t_node * a, t_node * f, t_node * q, t_node * b, int d)
+void rbal(t_node **treeroot, t_node *a, t_node *f, t_node *q, t_node *b, int d)
 {
  /*******************************************************************************
   *  A private library function that will rbal the AVL tree to a balanced state 
@@ -161,7 +161,7 @@ void rbal(t_node ** treeroot, t_node * a, t_node * f, t_node * q, t_node * b, in
 	    c->tn_bf = 0;
 	    b = c;		/* copy pointer for wrap up at the end */
 
-	} /* else */
+	}			/* else */
     else			/* d = -1 */
     /* right imbalance H(l)-H(r) = -1 */ if (b->tn_bf == -1) {
 	/* RR ROTATION */

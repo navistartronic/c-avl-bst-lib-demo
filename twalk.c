@@ -95,8 +95,7 @@ Boolean twalk(TWalkOps op, Traversals order, ...)
     t_header *cp_header(t_header *, char *);
 
     void setflags(Traversals, struct traversals *);
-    operation_status action(TWalkOps op, void (*compf) (void *, int), int depth, t_node * p, t_header * ph_dup, t_node * p_dup,
-			    t_node ** pp_dup, t_node ** dp, int *count);
+    operation_status action(TWalkOps op, void (*compf)(void *, int), int depth, t_node *p, t_header *ph_dup, t_node *p_dup, t_node **pp_dup, t_node **dp, int *count);
 
     extern void tdispose(t_header *);
     extern void tfreem(MallocTypes mkind, ...);
@@ -126,7 +125,7 @@ Boolean twalk(TWalkOps op, Traversals order, ...)
     /* special handling: we are passing in a point to a function in the va_arg list, we need to typedef it for ease of parsing: */
     /* technically it is "Leaf" but we don't have access to what that is in here: typedef void (*PFUNC)(Leaf *pl, int level); */
     /* reference: https://cboard.cprogramming.com/c-programming/151134-using-function-pointers-when-argument-list-functions-arent-known-beforehand.html */
-    typedef void (*PFUNC) (void *pl, int level);
+    typedef void (*PFUNC)(void *pl, int level);
     PFUNC p_uvf;
     p_uvf = NULL;
 
@@ -341,7 +340,7 @@ void setflags(Traversals order, struct traversals *traversal)
 }
 
 /* cp_header: make a copy of the tree header */
-t_header *cp_header(t_header * ph, char *ntn)
+t_header *cp_header(t_header *ph, char *ntn)
 {
  /*******************************************************************************
   *  A private local function that copies the current tree header.
@@ -390,8 +389,7 @@ t_header *cp_header(t_header * ph, char *ntn)
 }
 
 /* operation_status_action: at each node we visit, perform this operation */
-operation_status action(TWalkOps op, void (*compf) (), int depth, t_node * p, t_header * ph_dup, t_node * p_dup, t_node ** pp_dup,
-			t_node ** dp, int *count)
+operation_status action(TWalkOps op, void (*compf)(), int depth, t_node *p, t_header *ph_dup, t_node *p_dup, t_node **pp_dup, t_node **dp, int *count)
 {
  /*******************************************************************************
   *  A private library function that performs the action on the node visited.
@@ -464,8 +462,7 @@ operation_status action(TWalkOps op, void (*compf) (), int depth, t_node * p, t_
 	    return (ERROR);
 	memcpy(p_dup, p, sizeof(t_node) + ph_dup->th_usiz);
 #ifdef DEBUG_MALLAC_USAGE
-	printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, p_dup,
-	       sizeof(t_header) + ph_dup->th_usiz);
+	printf(">>> memcpy FROM LOCATION 0x%-5x TO LOCATION 0x%-5x; %i BYTES <<<\n", p, p_dup, sizeof(t_header) + ph_dup->th_usiz);
 #endif
 	p_dup->tn_id = ph_dup->th_id;
 	if (*pp_dup != NULL)

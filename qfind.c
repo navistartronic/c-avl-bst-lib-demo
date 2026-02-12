@@ -27,7 +27,7 @@ static char *RCSid[] = { "$Id: qfind.c,v 2.2 1999/01/02 22:27:15 roger Exp $" };
 
 
 /* qfind: search tree w/o setting any pointers for specified key */
-Boolean qfind(t_header * ph, t_node * tnode)
+Boolean qfind(t_header *ph, t_node *tnode)
 {
  /*******************************************************************************
   *  An internal library function that does a quick search a bst tree to see if 

@@ -30,8 +30,7 @@ extern int bst_errno;
 
 
 /* bst_create: create a new tree header record returning true or false */
-Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (*compf) (void *, void *),
-		   void (*prntf) (void *, int), TreeVerifyType th_stat)
+Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (*compf)(void *, void *), void(*prntf)(void *, int), TreeVerifyType th_stat)
 {
  /*******************************************************************************
   *  A user acccessible function that creates a new AVL or BST search tree.
@@ -86,12 +85,12 @@ Boolean bst_create(char *tname, BstType ttype, int leafsize, int fixedrec, int (
     }
 
     /* Check for valid bst class: AVL or bst
-       if (ttype != AVL || ttype != BST) {  
+    if (ttype != AVL || ttype != BST) {  
        bst_errno = BST_ERR_UKNOWN_BST_TYPE;
        return (FALSE);
-       }
+    }
 
-       /* check for valid leaf size being passed */
+    /* check for valid leaf size being passed */
     if (leafsize <= 0) {
 	bst_errno = BST_ERR_LEAFNODE_SIZE_ZERO;
 	return (FALSE);

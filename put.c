@@ -61,10 +61,9 @@ Boolean bst_put(char *tname, void *pl)
 
     extern void *tallocm(MallocTypes mkind, ...);
     extern void bst_stat(char *tname);
-    extern t_node *find_node(t_node * treeroot, void *keyrecord, int (*th_ucf) (void *, void *), t_node ** a, t_node ** f,
-			     t_node ** q);
-    extern Boolean put_node(t_header * ph, t_node * pcopy, int (*th_ucf) (), t_node * a, t_node * q, t_node ** b, int *d);
-    extern void rbal(t_node ** treeroot, t_node * a, t_node * f, t_node * q, t_node * b, int d);
+    extern t_node *find_node(t_node *treeroot, void *keyrecord, int (*th_ucf)(void *, void *), t_node **a, t_node **f, t_node **q);
+    extern Boolean put_node(t_header *ph, t_node *pcopy, int (*th_ucf)(), t_node *a, t_node *q, t_node **b, int *d);
+    extern void rbal(t_node ** treeroot, t_node *a, t_node *f, t_node *q, t_node *b, int d);
 
     bst_errno = BST_ERR_RESET;
 

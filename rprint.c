@@ -84,7 +84,7 @@ void bst_rprint(char *tname)
 
 
 /* inorderprint: traverses the tree inorder only it works on the right    */
-void inorderprint(t_node * p, int *k, int th_usiz)
+void inorderprint(t_node *p, int *k, int th_usiz)
 {
     /* side of the tree (top of screen) and works its way to    */
     /* the left (bottom of screen)                              */

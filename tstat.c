@@ -65,7 +65,7 @@ void bst_stat(char *tname)
 
     t_header *ph;
 
-    void checkbalance(t_node * p);
+    void checkbalance(t_node *p);
 
     extern t_header *find_header(char *);
     extern void bst_print(char *);
@@ -98,7 +98,7 @@ void bst_stat(char *tname)
 
 
 /* checkbalance: does the actual work */
-void checkbalance(t_node * p)
+void checkbalance(t_node *p)
 {
  /*******************************************************************************
   *  A user acccessible function that creates a new AVL or BST search tree.
@@ -179,7 +179,7 @@ void checkbalance(t_node * p)
 
 
 /* depth: compute the depth or height current tree where we are currently at. */
-int depth(t_node * p1)
+int depth(t_node *p1)
 {
  /*******************************************************************************
   *  A private local function that compute the depth or height current tree now.
@@ -216,7 +216,7 @@ int depth(t_node * p1)
 }				/* depth */
 
 /* searchall():  take all possible paths in this tree to the leaves and keep track of the maximum height encountered in this tree */
-void searchall(t_node * p2, int *d1)
+void searchall(t_node *p2, int *d1)
 {
  /*******************************************************************************
   *  A private local function that take all possible paths in this tree to the leaves and

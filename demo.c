@@ -105,11 +105,11 @@
  **               FOR DEBUGGING AND TESTING ONLY                       **
  ************************************************************************/
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-#define  MAX_ID_LEN          32	/* program version number */
-/* included only for debugging or temp TODO on treewalk */
-#include "struct.h"
-typedef struct header t_header;
-typedef struct node t_node;
+  #define  MAX_ID_LEN          32	/* program version number */
+  /* included only for debugging or temp TODO on treewalk */
+  #include "struct.h"
+  typedef struct header t_header;
+  typedef struct node t_node;
 #endif
 
 #define  MAX_TREENAME_LENGTH   8	/* max length for a tree name;  */
@@ -163,7 +163,6 @@ void display_intro(void)
 
 /*
     time_t timer;
-
     time(&timer);
     tm = localtime(&timer);
 */
@@ -296,31 +295,31 @@ int process_cmd(ValidCmd usrcmd)
 {
 
 
-    char tn[MAX_TREENAME_LENGTH + 1],	/* buffer to hold user entered tree name */
-     ttype[MAX_CMD_LEN + 1],		/* buffer to hold user tree type: avl or bst */
-     kn[LEAF_KEYLEN + 2];		/* buffer to hold user entered key name include/leaf.h */
+    char tn[MAX_TREENAME_LENGTH + 1],    /* buffer to hold user entered tree name */
+    ttype[MAX_CMD_LEN + 1],              /* buffer to hold user tree type: avl or bst */
+    kn[LEAF_KEYLEN + 2];                 /* buffer to hold user entered key name include/leaf.h */
 
-    void display_bad_cmd(void);		/* comment to make when an invalid selection is made */
-    void new_tree(char *, char *);	/* create a new tree */
-    void rprint_tree(char *);		/* recursively print the tree (DEBUGGING ONLY) */
-    void print_tree(char *);		/* use a non-recursive tree print routine */
-    void node_count(char *);		/* get current number of nodes in the tree */
-    void is_empty(char *);		/* check if tree is empty: has zero nodes */
-    void check_tree(char *);		/* perform tree verification (DEBUGGING ONLY) */
-    void delete_tree(char *);		/* delete entire tree; all nodes and tree definintion */
-    void show_trees(void);		/* show list of defined trees */
-    void delete_trees(void);		/* delete list of defined trees */
-    void add_key(char *, char *);	/* add a new key to the tree */
-    void find_key(char *, char *);	/* find a key in the tree and return it */
-    void delete_key(char *, char *);	/* remove a key from the tree */
-    void is_defined(char *);		/* see if tree is defined or not */
+    void display_bad_cmd(void);          /* comment to make when an invalid selection is made */
+    void new_tree(char *, char *);       /* create a new tree */
+    void rprint_tree(char *);            /* recursively print the tree (DEBUGGING ONLY) */
+    void print_tree(char *);             /* use a non-recursive tree print routine */
+    void node_count(char *);             /* get current number of nodes in the tree */
+    void is_empty(char *);               /* check if tree is empty: has zero nodes */
+    void check_tree(char *);             /* perform tree verification (DEBUGGING ONLY) */
+    void delete_tree(char *);            /* delete entire tree; all nodes and tree definintion */
+    void show_trees(void);               /* show list of defined trees */
+    void delete_trees(void);             /* delete list of defined trees */
+    void add_key(char *, char *);        /* add a new key to the tree */
+    void find_key(char *, char *);       /* find a key in the tree and return it */
+    void delete_key(char *, char *);     /* remove a key from the tree */
+    void is_defined(char *);             /* see if tree is defined or not */
 #ifdef DEBUG_EXPLOIT_TREE_HDR
-    void stat_tree(char *);		/* print tree header record */
-    void treewalk(char *);		/* traverse tree in 3 ways */
+    void stat_tree(char *);              /* print tree header record */
+    void treewalk(char *);               /* traverse tree in 3 ways */
 #endif
-    void tcopy(char *);			/* duplicate an existing tree */
-    void tident(char *);		/* are two trees identical in structure */
-    void tequal(char *);		/* are two trees equal */
+    void tcopy(char *);	                 /* duplicate an existing tree */
+    void tident(char *);                 /* are two trees identical in structure */
+    void tequal(char *);                 /* are two trees equal */
 
     if (usrcmd == QUIT) {
 	/* traverse through all the trees freeing each node */
@@ -357,7 +356,7 @@ int process_cmd(ValidCmd usrcmd)
 		strcpy(ttype, "\0");
 	    }
 	} while (strlen(ttype) == 0);
-	/*printf("tree type [%s]\n", ttype);*/
+	/*printf("tree type [%s]\n", ttype); */
 	new_tree(tn, ttype);
 	break;
     case RPRINT:
@@ -442,8 +441,8 @@ void display_ending(void)
 /* new_tree: create a new bst tree */
 void new_tree(char *tn, char *tt)
 {
-    int f(Leaf *, Leaf *);		/* user written compare function for this tree */
-    void Print_Node(Leaf *, int);	/* user written tree printing routine (optional) */
+    int f(Leaf *, Leaf *);              /* user written compare function for this tree */
+    void Print_Node(Leaf *, int);       /* user written tree printing routine (optional) */
 
     if (strncmp(tt, "avl", 3) && strncmp(tt, "bst", 3)) {
 	printf("\n  ### Can't create tree %s -- invalid tree type [%s]###\n", tn, tt);
@@ -512,7 +511,7 @@ void check_tree(char *tn)
 	printf("\n  --- verified  ---\n");
 }
 
-/* deltete_tree: delete all nodes and the tree definition itself */
+/* delete_tree: delete all nodes and the tree definition itself */
 void delete_tree(char *tn)
 {
     Leaf *pk;			/* structure to pass containing key to find */
@@ -534,7 +533,7 @@ void show_trees(void)
      * after the call and usage of it: the malloc'd tree name string array value, and 
      * the malloc'd array of pointers string[] 
      *   storage[0]  => "treeFoo", storage[1] => "treeBar", ..., storage[size-1] => "treeBar"
-     */ 
+     */
     char **strings = NULL;
     int size, i;
     extern void find_header_list(char ***stringArr, int *arrSize);
@@ -546,7 +545,7 @@ void show_trees(void)
     } else {
 	for (i = 0; i < size; i++) {
 	    printf("\t%5d\t%s\n", i + 1, strings[i]);
-            free(strings[i]);
+	    free(strings[i]);
 	}
     }
 
@@ -561,7 +560,7 @@ void delete_trees(void)
      * after the call and usage of it: the malloc'd tree name string array value, and 
      * the malloc'd array of pointers string[] 
      *   storage[0]  => "treeFoo", storage[1] => "treeBar", ..., storage[size-1] => "treeBar"
-     */ 
+     */
     char **strings = NULL;
     int size, i;
     extern void find_header_list(char ***stringArr, int *arrSize);
@@ -574,7 +573,7 @@ void delete_trees(void)
 	for (i = 0; i < size; i++) {
 	    printf("cleanup: deleting tree %5d\t%s\n", i + 1, strings[i]);
 	    delete_tree(strings[i]);
-            free(strings[i]);
+	    free(strings[i]);
 	}
     }
 
@@ -724,8 +723,8 @@ void treewalk(char *tn)
     t_header *ph;
     char buf[MAX_CMD_LEN + 1];
     int ttraversal;
-    void Print_Node(Leaf *, int);		/* user written tree printing routine (optional) */
-    void Treewalk_Print_Node(Leaf *, int);	/* user written tree printing routine (optional) */
+    void Print_Node(Leaf *, int);            /* user written tree printing routine (optional) */
+    void Treewalk_Print_Node(Leaf *, int);   /* user written tree printing routine (optional) */
     Boolean twalk(TWalkOps, Traversals, ...);
     extern t_header *find_header(char *tname);
 
@@ -843,7 +842,7 @@ void display_err_msg(void)
 }
 
 /* f: user written compare function to compare any two nodes in the tree */
-int f(Leaf * r1, Leaf * r2)
+int f(Leaf *r1, Leaf *r2)
 {
     /*********************************************************************************
     ** YOU MUST WRITE A COMPARE FUNCTION FOR YOUR STRUCTURE/OBJECT THAT WILL RETURN **
@@ -858,7 +857,7 @@ int f(Leaf * r1, Leaf * r2)
 }
 
 /* Print_Node: user written tree print routing (optional); (this one has debugging info in it */
-void Print_Node(Leaf * pl, int level)
+void Print_Node(Leaf *pl, int level)
 {
     /***************************************************************************************
     ** THIS USER WRITTEN FUNCTION IS OPTIONAL. IF YOU USE IT, YOU CAN FORMAT THE PRINTING **
@@ -899,15 +898,14 @@ void Print_Node(Leaf * pl, int level)
 	/* user space should not know about this detail, how to get to the tree header record */
 	pn = ((t_node *) pl) - 1;
 
-	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf,
-	       pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
+	printf("(0x%x) LVL: %3i, BAL: %2i, TAG: %s ", pn, level, pn->tn_bf, pn->tn_tag == LEFT_SON ? "lson" : (pn->tn_tag == ROOT ? "ROOT" : "rson"));
 
 	printf("ulink(0x%-4x) llink(0x%-4x) rlink(0x%-4x) \n\n", pn->tn_ulink, pn->tn_llink, pn->tn_rlink);
 #endif
     }
 }
 
-void Treewalk_Print_Node(Leaf * pl, int level)
+void Treewalk_Print_Node(Leaf *pl, int level)
 {
     if (pl == NULL) {
 	printf("(Treewalk_Print_Node():: level [%09d] key [%s]\n", level, "NULL");

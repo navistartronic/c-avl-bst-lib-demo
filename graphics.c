@@ -27,7 +27,7 @@ static char *RCSid[] = { "$Id$" };
 
 
 /* gheader: graphically show the header node */
-void gheader(t_header * ph)
+void gheader(t_header *ph)
 {
  /*******************************************************************************
   *  A user acccessible function that graphs the tree header node.
@@ -58,7 +58,7 @@ void gheader(t_header * ph)
 }
 
 /* gheader: graphically show the tree node */
-void gnode(t_header * ph, t_node * pn)
+void gnode(t_header *ph, t_node *pn)
 {
  /*******************************************************************************
   *  A user acccessible function that graphs the tree leaf node.

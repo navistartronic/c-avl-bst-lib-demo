@@ -66,7 +66,7 @@ Boolean bst_release(char *tname, void *pl)
     /* check if tree is defined */
     if ((ph = find_header(tname)) == TREE_NOT_DEFINED) {
 	bst_errno = BST_ERR_TREE_NOT_DEFINED;
-	return (FALSE);	/* tree not defined */
+	return (FALSE);	 /* tree not defined */
     }
 
     /* cast the pointer back to the header part of the node from pointing */
@@ -86,7 +86,7 @@ Boolean bst_release(char *tname, void *pl)
     /* set the users pointer to NULL so they may no longer point to a valid */
     /* address anymore. Else they would still be using the node in the      */
     /* free list yet.                                                       */
-    pl = NULL;			/* "fix" users pointer so they cannot dereference it no more */
+    pl = NULL;  /* "fix" users pointer so they cannot dereference it no more */
 
     return (TRUE);
 }

@@ -31,7 +31,7 @@ typedef enum { TREE_VERIFY_NO, TREE_VERIFY_YES } TreeVerifyType;
 extern void *bst_alloc(char *);
 extern Boolean bst_copy(char *, char *);
 extern int bst_count(char *);
-extern Boolean bst_create(char *, int, int, int, int (*)(Leaf *, Leaf *), void (*prntf) (Leaf *, int), int);
+extern Boolean bst_create(char *, int, int, int, int (*)(Leaf *, Leaf *), void(*prntf)(Leaf *, int), int);
 extern Boolean bst_defined(char *);
 extern Boolean bst_delete(char *);
 extern Boolean bst_empty(char *);
@@ -47,6 +47,6 @@ extern Boolean bst_remove(char *, void *);
 extern Boolean bst_release(char *, void *);
 extern void bst_stat(char *);	/* debugging purposes only; remove when done */
 
-/* TODO extern void     bst_trees  (void); *//* return array of defined trees */
+/* TODO extern void bst_trees  (void); */ /* return array of defined trees */
 /* TODO extern char[] bst_treewalk(tn, treeorder,userfunction); */
 /* perform inorder/preorder/postorder on each node then calling user defined function */

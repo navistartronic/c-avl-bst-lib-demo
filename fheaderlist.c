@@ -83,7 +83,7 @@ void find_header_list(char ***stringArr, int *arrSize)
 
 	size++;
 	storage = (char **) realloc(storage, (size + 1) * sizeof(char *));
-        storage[size] = NULL;   /* critical, older gcc & Sun Studio did not need this else realloc(): invalid pointer (core dumped)  */
+	storage[size] = NULL;	/* critical, older gcc & Sun Studio did not need this else realloc(): invalid pointer (core dumped)  */
     }
 
     /*

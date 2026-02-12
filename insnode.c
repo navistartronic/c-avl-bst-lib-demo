@@ -27,7 +27,7 @@ static char *RCSid[] = { "$Id$" };
 
 
 /* put_node: insert a node into the tree. */
-Boolean put_node(t_header * ph, t_node * pcopy, int (*th_ucf) (), t_node * a, t_node * q, t_node ** b, int *d)
+Boolean put_node(t_header *ph, t_node *pcopy, int (*th_ucf)(), t_node *a, t_node *q, t_node **b, int *d)
 {
  /*******************************************************************************
   *  A private library function that inserts a tree node into the tree returning

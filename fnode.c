@@ -29,7 +29,7 @@ extern int bst_errno;
 
 
 /* find_node: search the tree for the given node */
-t_node *find_node(t_node * treeroot, void *keyrecord, int (*th_ucf) (void *, void *), t_node ** a, t_node ** f, t_node ** q)
+t_node *find_node(t_node *treeroot, void *keyrecord, int (*th_ucf)(void *, void *), t_node **a, t_node **f, t_node **q)
 {
  /*******************************************************************************
   *  An internal library function that finds and returns the desired node in the tree.

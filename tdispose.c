@@ -29,7 +29,7 @@ extern t_header *t_head;
 
 
 /* tdispose: delete a tree and all its nodes */
-void tdispose(t_header * ph)
+void tdispose(t_header *ph)
 {
  /*******************************************************************************
   *  A private library function that deletes an entire tree and all its nodes.
